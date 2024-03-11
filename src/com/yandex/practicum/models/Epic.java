@@ -3,7 +3,6 @@ package com.yandex.practicum.models;
 import java.util.ArrayList;
 
 public class Epic extends Task {
-    private int id;
 
     private ArrayList<Integer> idSubtasks;
 
@@ -13,7 +12,7 @@ public class Epic extends Task {
     }
 
     @Override
-    public String toString() {
+    public String toString () {
         return "Epic{" +
                 "id=" + idTask +
                 ", idSubtasks=" + idSubtasks +

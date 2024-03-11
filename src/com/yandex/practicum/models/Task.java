@@ -6,12 +6,12 @@ public class Task {
 
     protected String name;
     protected String description;
-    protected Integer idTask;
+    protected int idTask;
     protected Status status;
 
-    public Task(String _name, String _description) {
-        this.name = _name;
-        this.description = _description;
+    public Task(String newName, String newDescription) {
+        this.name = newName;
+        this.description = newDescription;
     }
 
     public Integer getId() {

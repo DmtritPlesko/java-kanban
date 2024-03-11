@@ -2,13 +2,10 @@ package com.yandex.practicum.models;
 
 public class Subtask extends Task {
 
-
-
-    public Subtask (String newName,String newDescription) {
-        super(newName,newDescription);
+    protected int idEpic;
+    public Subtask(String newName, String newDescription) {
+        super(newName, newDescription);
     }
-
-
 
     @Override
     public String toString() {
@@ -16,7 +13,8 @@ public class Subtask extends Task {
                 "idSubtask=" + idTask +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                ", status="+status+
+                ", status=" + status +
                 '}';
     }
+
 }
