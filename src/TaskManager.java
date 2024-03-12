@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.yandex.practicum.models.*;
@@ -37,12 +38,8 @@ public class TaskManager {
         }
     }
 
-    private void initStatusByEpic(Subtask subtask) {
-        if (listEpic.get(subtask.getId()).equals(Status.DOWN)) {
-            listEpic.get(subtask.getId()).setStatus(subtask.getStatus());
-        } else {
-            listEpic.get(subtask.getId()).setStatus(Status.IS_PROCESS);
-        }
+    private void initStatusByEpic(Epic epic) {
+
     }
 
     public void createNewSubtask(Subtask subtask) {
@@ -51,7 +48,7 @@ public class TaskManager {
         subtask.setID(id);
         listSubtask.put(id, subtask);
 
-        initStatusByEpic(subtask);
+//        initStatusByEpic(subtask);
     }
 
     public void updateSubtask(Subtask subtask) {
@@ -62,7 +59,7 @@ public class TaskManager {
             System.out.println("невозможно обновить подзадачу");
         }
 
-        initStatusByEpic(subtask);
+//        initStatusByEpic(subtask);
     }
 
     public void createNewEpic(Epic epic) {
@@ -80,22 +77,27 @@ public class TaskManager {
         }
     }
 
-    private Status changeStatusByEpic() {
-        if (listEpic.isEmpty()) {
+    private Status changeStatusByEpic (Epic epic) {
+        if (epic.getSubtaskByEpic().isEmpty()) {
             return Status.NEW;//если пустой
         } else {
-
+            int countIsNew = 0;
             int countIsProcess = 0;
-            for (Integer i : listEpic.keySet()) {
-                if (listEpic.get(i).getStatus().equals(Status.DOWN)) {
+            ArrayList <Integer>  temp = epic.getSubtaskByEpic();
+            for(Integer i : temp) {
+                if(listSubtask.get(i).getStatus().equals(Status.NEW)) {
+                    countIsNew++;
+                } else if (listSubtask.get(i).getStatus().equals(Status.DONE)) {
                     countIsProcess++;
                 }
-            }
-            if (countIsProcess == id) {
-                return Status.DOWN;//если все завершены
+                if (countIsProcess == temp.size()) {
+                    return Status.DONE;//если все завершены
+                } else if (countIsNew ==temp.size()){
+                     return Status.NEW;
+                }
             }
         }
-        return Status.IS_PROCESS;//все другие случаи
+        return Status.IN_PROGRESS;//все другие случаи
     }
 
     public void deleteAllTask() { //идея такая что если список основных задач будет очищен все другие тоже будут очищены
@@ -118,7 +120,7 @@ public class TaskManager {
         if (listSubtask.containsKey(Id)) {
             listSubtask.remove(Id);
             System.out.println("подзадача удалена");
-            listEpic.get(Id).setStatus(Status.DOWN);
+            listEpic.get(Id).setStatus(Status.DONE);
         } else {
             System.out.println("невозможно удалить задачу");
         }

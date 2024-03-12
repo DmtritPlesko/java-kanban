@@ -20,7 +20,7 @@ public class Main {
 
         Subtask subtask = new Subtask("fqfqwfwq","qwfqwfqwfqw");
         man.createNewSubtask(subtask);
-        subtask.setStatus(Status.IS_PROCESS);
+        subtask.setStatus(Status.IN_PROGRESS);
 
 
 
