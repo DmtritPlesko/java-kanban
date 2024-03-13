@@ -1,5 +1,5 @@
 import java.util.ArrayList;
-import java.util.Arrays;
+
 import java.util.HashMap;
 
 import com.yandex.practicum.models.*;
@@ -74,9 +74,9 @@ public class TaskManager {
         }
     }
 
-    private Status changeStatusByEpic (Epic epic) { //переписал метод который и проверяет и сразу меняет статус
+    private void changeStatusByEpic (Epic epic) { //переписал метод который и проверяет и сразу меняет статус
         if (epic.getSubtaskByEpic().isEmpty()) {
-            return Status.NEW;//если пустой
+            epic.setStatus( Status.NEW);//если пустой
         } else {
             int countIsNew = 0;
             int countIsProcess = 0;
@@ -88,16 +88,16 @@ public class TaskManager {
                     countIsProcess++;
                 }
                 if (countIsProcess == temp.size()) {
-                    return Status.DONE;//если все завершены
+                    epic.setStatus(Status.DONE);//если все завершены
                 } else if (countIsNew ==temp.size()){
-                     return Status.NEW;
+                     epic.setStatus(Status.NEW);
                 }
             }
         }
-        return Status.IN_PROGRESS;//все другие случаи
+        epic.setStatus(Status.IN_PROGRESS);//все другие случаи
     }
 
-    public void deleteAllTask() { //идея такая что если список основных задач будет очищен все другие тоже будут очищены
+    public void deleteAllTask() {
         listTask.clear();
         listSubtask.clear();
         listEpic.clear();
@@ -115,6 +115,15 @@ public class TaskManager {
 
     public void deleteSubtaskForID(Integer Id) {
         if (listSubtask.containsKey(Id)) {
+            for(Integer i : listEpic.keySet()) {
+                ArrayList<Integer> temp = listEpic.get(i).getSubtaskByEpic();
+                for(Integer j : temp) {
+                    if(listSubtask.get(j).equals(listSubtask.get(id))) {
+                        temp.remove(j);
+                        changeStatusByEpic(listEpic.get(j));
+                    }
+                }
+            }
             listSubtask.remove(Id);
             System.out.println("подзадача удалена");
         } else {
@@ -125,9 +134,10 @@ public class TaskManager {
     public void deleteEpicForID(Integer Id) {
         if (listEpic.containsKey(Id)) {
             listEpic.remove(Id);
-            System.out.println("задача удалена из эпика");
+            System.out.println("эпик удалён");
+
         } else {
-            System.out.println("невозможно удалить задачу из эпика");
+            System.out.println("невозможно удалить эпик");
         }
     }
 
@@ -159,17 +169,13 @@ public class TaskManager {
         return null;
     }
 
-    public void printTaskForEpic() {
-        int count = 0;
-        ArrayList<Integer> temp = new ArrayList<>();
-        for (Integer i : listEpic.keySet()) {
-            temp = listEpic.get(i).getSubtaskByEpic();
-            for(Integer j : temp) {
-                System.out.println(count+" - "+ listSubtask.get(j).getName());
-                count++;
-            }
-            count = 0;
+    public ArrayList<Subtask> printTaskForEpic(Epic epic) {
+        ArrayList<Subtask> temp = new ArrayList<>();
+        for(Integer i : epic.getSubtaskByEpic()) {
+            temp.add(listSubtask.get(i));
         }
+
+        return temp;
     }
 
 
