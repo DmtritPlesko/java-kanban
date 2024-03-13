@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 import com.yandex.practicum.models.*;
@@ -38,10 +39,7 @@ public class TaskManager {
         }
     }
 
-    private void initStatusByEpic(Epic epic) {
-
-    }
-
+    
     public void createNewSubtask(Subtask subtask) {
 
         subtask.setStatus(Status.NEW);
@@ -120,7 +118,6 @@ public class TaskManager {
         if (listSubtask.containsKey(Id)) {
             listSubtask.remove(Id);
             System.out.println("подзадача удалена");
-            listEpic.get(Id).setStatus(Status.DONE);
         } else {
             System.out.println("невозможно удалить задачу");
         }
@@ -168,6 +165,7 @@ public class TaskManager {
         int count = 1;
         for (Integer i : listEpic.keySet()) {
             epic = listEpic.get(i);
+
             System.out.println(count + " - " + epic.getName());
             count++;
         }
