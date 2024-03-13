@@ -39,14 +39,14 @@ public class TaskManager {
         }
     }
 
-    
+
     public void createNewSubtask(Subtask subtask) {
 
         subtask.setStatus(Status.NEW);
         subtask.setID(id);
         listSubtask.put(id, subtask);
 
-//        initStatusByEpic(subtask);
+
     }
 
     public void updateSubtask(Subtask subtask) {
@@ -57,7 +57,6 @@ public class TaskManager {
             System.out.println("невозможно обновить подзадачу");
         }
 
-//        initStatusByEpic(subtask);
     }
 
     public void createNewEpic(Epic epic) {
@@ -75,7 +74,7 @@ public class TaskManager {
         }
     }
 
-    private Status changeStatusByEpic (Epic epic) {
+    private Status changeStatusByEpic (Epic epic) { //переписал метод который и проверяет и сразу меняет статус
         if (epic.getSubtaskByEpic().isEmpty()) {
             return Status.NEW;//если пустой
         } else {
@@ -161,13 +160,15 @@ public class TaskManager {
     }
 
     public void printTaskForEpic() {
-        Epic epic;
-        int count = 1;
+        int count = 0;
+        ArrayList<Integer> temp = new ArrayList<>();
         for (Integer i : listEpic.keySet()) {
-            epic = listEpic.get(i);
-
-            System.out.println(count + " - " + epic.getName());
-            count++;
+            temp = listEpic.get(i).getSubtaskByEpic();
+            for(Integer j : temp) {
+                System.out.println(count+" - "+ listSubtask.get(j).getName());
+                count++;
+            }
+            count = 0;
         }
     }
 
