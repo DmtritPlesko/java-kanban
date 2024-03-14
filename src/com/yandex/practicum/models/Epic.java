@@ -18,6 +18,14 @@ public class Epic extends Task {
         return idSubtasks;
     }
 
+   public void deletSubtaskByEpic (int id) {
+        if(idSubtasks.contains(id)) {
+            idSubtasks.remove(id);
+        } else {
+            System.out.println("Невозмодно удалить задачу");
+        }
+   }
+
     @Override
     public String toString () {
         return "Epic{" +

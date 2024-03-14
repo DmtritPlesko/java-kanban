@@ -41,7 +41,7 @@ public class TaskManager {
 
 
     public void createNewSubtask(Subtask subtask) {
-
+        id++;//добавил
         subtask.setStatus(Status.NEW);
         subtask.setID(id);
         listSubtask.put(id, subtask);
@@ -60,6 +60,7 @@ public class TaskManager {
     }
 
     public void createNewEpic(Epic epic) {
+        id++;//добавил
         epic.setID(id);
         listEpic.put(id, epic);
         System.out.println("задача добавлена в эпик");
@@ -115,15 +116,10 @@ public class TaskManager {
 
     public void deleteSubtaskForID(Integer Id) {
         if (listSubtask.containsKey(Id)) {
-            for(Integer i : listEpic.keySet()) {
-                ArrayList<Integer> temp = listEpic.get(i).getSubtaskByEpic();
-                for(Integer j : temp) {
-                    if(listSubtask.get(j).equals(listSubtask.get(id))) {
-                        temp.remove(j);
-                        changeStatusByEpic(listEpic.get(j));
-                    }
-                }
-            }
+            Subtask sub = listSubtask.get(Id);
+            Epic epic = listEpic.get(sub.getIdEpic());
+            epic.deletSubtaskByEpic(Id);
+            changeStatusByEpic(epic);
             listSubtask.remove(Id);
             System.out.println("подзадача удалена");
         } else {
