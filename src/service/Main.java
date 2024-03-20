@@ -1,8 +1,10 @@
+package service;
+
 import com.yandex.practicum.models.*;
 
 public class Main {
     public static void main(String[] args) {
-        TaskManager man = new TaskManager();
+        TaskManager man = new InMemoryTaskManager();
 
 //        man.createNewTask();
 //
