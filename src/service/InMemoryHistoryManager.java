@@ -23,7 +23,5 @@ public class InMemoryHistoryManager implements HistoryManager {
         return history;
     }
 
-    public TaskManager getDefault() {
-        return new InMemoryTaskManager();
-    }
+
 }

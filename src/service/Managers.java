@@ -3,7 +3,7 @@ package service;
 import service.TaskManager;
 
 public class Managers  {
-//    public static TaskManager createNewManager() {
+//    public static TaskManager createNewManager() { заготовка примерно такая будет
 //
 //
 //
@@ -17,6 +17,9 @@ public class Managers  {
     public  static HistoryManager getDefaultHistory () {
         return new InMemoryHistoryManager();
     }
-
+    
+    public TaskManager getDefault() {
+        return new InMemoryTaskManager();
+    }
 
 }
