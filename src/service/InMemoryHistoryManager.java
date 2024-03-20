@@ -20,6 +20,10 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public LinkedList<Task> getHistory() {
-        return this.history;
+        return history;
+    }
+
+    public TaskManager getDefault() {
+        return new InMemoryTaskManager();
     }
 }
