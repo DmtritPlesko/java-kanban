@@ -154,7 +154,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Task getTaskById(Integer ID) {
         if (listTask.containsKey(ID)) {
-            his.addHistory(listTask.get(ID));
+            his.addHistory();
             return listTask.get(ID);
         } else {
             System.out.println("задача с таким айди не существует");

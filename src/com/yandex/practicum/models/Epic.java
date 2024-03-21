@@ -1,6 +1,7 @@
 package com.yandex.practicum.models;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Epic extends Task {
 
@@ -36,5 +37,14 @@ public class Epic extends Task {
                 ", idTask=" + idTask +
                 ", status=" + status +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Epic epic = (Epic) o;
+        return Objects.equals(idTask, epic.idTask);
     }
 }
