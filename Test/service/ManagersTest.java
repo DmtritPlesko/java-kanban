@@ -1,7 +1,4 @@
-package Service;
-
-import service.HistoryManager;
-import service.Managers;
+package service;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;

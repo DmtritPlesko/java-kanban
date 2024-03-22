@@ -4,6 +4,9 @@ import com.yandex.practicum.models.Epic;
 import com.yandex.practicum.models.Subtask;
 import com.yandex.practicum.models.Task;
 
+import javax.swing.text.MaskFormatter;
+import java.util.Map;
+
 
 import java.util.ArrayList;
 
@@ -37,4 +40,8 @@ public interface TaskManager {
     Epic getEpicById(Integer ID);
 
     ArrayList<Subtask> printTaskForEpic(Epic epic);
+
+    Map<Integer,Task> getTaskList ();
+    Map<Integer,Subtask> getSubtaskList ();
+    Map<Integer,Epic> getEpicList ();
 }

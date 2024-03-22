@@ -1,4 +1,4 @@
-package Service;
+package service;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -7,7 +7,6 @@ import com.yandex.practicum.models.Subtask;
 import com.yandex.practicum.models.Task;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import service.InMemoryTaskManager;
 
 class InMemoryTaskManagerTest {
 

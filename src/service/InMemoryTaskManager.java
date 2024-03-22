@@ -2,21 +2,23 @@ package service;
 
 import java.util.ArrayList;
 
+import java.util.Map;
 import java.util.HashMap;
 
 import com.yandex.practicum.models.*;
 
 public class InMemoryTaskManager implements TaskManager {
     protected int id = 0;
-    private HashMap<Integer, Task> listTask;
-    private HashMap<Integer, Subtask> listSubtask;
-    private HashMap<Integer, Epic> listEpic;
+    private Map<Integer, Task> listTask;
+    private Map<Integer, Subtask> listSubtask;
+    private Map<Integer, Epic> listEpic;
     private InMemoryHistoryManager his;
 
     public InMemoryTaskManager() {
         this.listTask = new HashMap<>();
         this.listSubtask = new HashMap<>();
         this.listEpic = new HashMap<>();
+        his = new InMemoryHistoryManager();
     }
 
     @Override
@@ -154,7 +156,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Task getTaskById(Integer ID) {
         if (listTask.containsKey(ID)) {
-            his.addHistory();
+            his.addHistory(listTask.get(ID));
             return listTask.get(ID);
         } else {
             System.out.println("задача с таким айди не существует");
@@ -194,5 +196,21 @@ public class InMemoryTaskManager implements TaskManager {
         return temp;
     }
 
+
+
+    //у меня вот тут только вопрос это можно интерпретировать как сабтайпинк ?
+    // просто мне кажется что Ad-hoс тут подойдёт лучше
+    @Override
+    public Map<Integer,Task> getTaskList () {
+        return listTask;
+    }
+    @Override
+    public Map<Integer,Subtask> getSubtaskList () {
+        return listSubtask;
+    }
+    @Override
+    public Map<Integer,Epic> getEpicList () {
+        return listEpic;
+    }
 
 }
