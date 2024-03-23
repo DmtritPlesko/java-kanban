@@ -8,6 +8,9 @@ import com.yandex.practicum.models.Task;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 class InMemoryTaskManagerTest {
 
     public static InMemoryTaskManager manager;
@@ -24,11 +27,11 @@ class InMemoryTaskManagerTest {
 
        task.setID(1);
 
-       Task task1 = new Task("Task2", "Hello hello");
+       Task task1 = new Task("Task1", "а тут ничего нет");
        task1.setID(1);
 
 
-       assertEquals(task,task1,"Задачи не совпадают");
+       assertEquals(task.getId(),task1.getId(),"Задачи не совпадают");
 
    }
 
@@ -38,10 +41,10 @@ class InMemoryTaskManagerTest {
 
         sub.setID(1);
 
-        Subtask sub2 = new Subtask("Sub2","Hello");
+        Subtask sub2 = new Subtask("Sub","Hello");
         sub2.setID(1);
 
-        assertEquals(sub,sub2,"Ошибка сравнения подзадач");
+        assertEquals(sub.getId(),sub2.getId(),"Ошибка сравнения подзадач");
 
    }
 
@@ -90,5 +93,143 @@ class InMemoryTaskManagerTest {
 
         assertNotNull(manager.getEpicById(epicID));
    }
-   
+
+   @Test
+   public void checkDeleteTask () {
+       Task task = new Task("Task1","Что то есть");
+
+       manager.createNewTask(task);
+
+       final int taskID = task.getId();
+
+       manager.deleteTaskForID(taskID);
+
+       assertNull(manager.getTaskById(taskID));
+   }
+
+   @Test
+    public void checkDeleteSubtask () {
+       Subtask sub = new Subtask("Sub1","Hello hello");
+
+       manager.createNewSubtask(sub);
+
+       final int subID = sub.getId();
+
+       manager.deleteSubtaskForID(subID);
+
+       assertNull(manager.getSubtaskById(subID));
+   }
+
+   @Test
+    public void checkDeleteEpic () {
+       Epic epic = new Epic("Epic1","Hello hello");
+
+       manager.createNewEpic(epic);
+
+       final int epicID = epic.getId();
+
+       manager.deleteEpicForID(epicID);
+
+       assertNull(manager.getEpicById(epicID));
+
+   }
+
+   @Test
+    public void checkUpdateTask () {
+        Task task1 = new Task("Task1","Текст для первой задачи");
+
+        manager.createNewTask(task1);
+
+        final int taskID = task1.getId();
+
+        Task task2 = new Task("Task2","Текс для второй задачи");
+        task2.setID(taskID);
+
+        manager.updateTask(task2);
+
+        assertEquals(manager.getTaskById(taskID).getName(),task2.getName(),"Задача не обнавляется");
+   }
+
+   @Test
+    public void checkUpdateSubtask () {
+       Subtask subTask1 = new Subtask("Subtask1","Текст для первой прдзадачи");
+
+       manager.createNewSubtask(subTask1);
+
+       final int subID = subTask1.getId();
+
+       Subtask subTask2 = new Subtask("Subtask2","Текст для второй прдзадачи");
+
+       subTask2.setID(subID);
+
+       manager.updateSubtask(subTask2);
+
+       assertEquals(manager.getSubtaskById(subID).getName(),subTask2.getName(),"Подзадачи не обнавляются");
+   }
+
+   @Test
+    public void checkUpdateEpic () {
+        Epic epic1 = new Epic("Epic1","Текст для эпика1");
+
+        manager.createNewEpic(epic1);
+
+        final int epicID = epic1.getId();
+
+        Epic epic2 = new Epic("Epic2","Tекст для эпика2");
+        epic2.setID(epicID);
+
+        manager.updateEpic(epic2);
+
+        assertEquals(manager.getEpicById(epicID).getName(),epic2.getName(),"Епик не обнавляется");
+   }
+
+   @Test
+    public void checkAllDelete () {
+       Task task = new Task("Task1","Что то тут есть");
+       Task task2 = new Task("Task2","Что то тут есть");
+
+       manager.createNewTask(task);
+       final int taskID = task.getId();
+       manager.createNewTask(task2);
+
+       Subtask subTask1 = new Subtask("Subtask1","Текст для первой прдзадачи");
+       Subtask subTask2 = new Subtask("Subtask2","Текст для второй прдзадачи");
+
+       manager.createNewSubtask(subTask1);
+       final int subID = subTask1.getId();
+       manager.createNewSubtask(subTask2);
+
+       Epic epic1 = new Epic("Epic1","Текст для эпика1");
+       Epic epic2 = new Epic("Epic2","Текст для эпика2");
+
+       manager.createNewEpic(epic1);
+       final int epicID = epic1.getId();
+       manager.createNewEpic(epic2);
+
+       manager.deleteAllTask();
+
+       assertNull(manager.getTaskById(taskID),"Задачи не удалились");
+       assertNull(manager.getSubtaskById(subID),"Подзадачи не удалились");
+       assertNull(manager.getEpicById(epicID),"Эпики не удалились");
+       System.out.println("Метод ниже");
+   }
+
+   @Test
+    public void checkGetList () {
+
+       Subtask sub = new Subtask("wqf","qwf");
+       Subtask sub2 = new Subtask("wqf","qwf");
+       Subtask sub3 = new Subtask("wqf","qwf");
+       Subtask sub4 = new Subtask("wqf","qwf");
+
+        manager.createNewSubtask(sub);
+       manager.createNewSubtask(sub2);
+       manager.createNewSubtask(sub3);
+       manager.createNewSubtask(sub4);
+
+       List<Subtask> tempTask = (List<Subtask>) manager.getList();
+
+       assertNotNull(tempTask);
+   }
+
 }

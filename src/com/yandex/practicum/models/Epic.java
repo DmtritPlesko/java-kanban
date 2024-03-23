@@ -2,10 +2,11 @@ package com.yandex.practicum.models;
 
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.List;
 
 public class Epic extends Task {
 
-    private ArrayList<Integer> idSubtasks;
+    private List<Integer> idSubtasks;
 
     public Epic (String newName,String newDescription) {
        super(newName,newDescription);
@@ -15,11 +16,11 @@ public class Epic extends Task {
     public void setIdSubtasks(Integer idSubtask) {
         this.idSubtasks.add(idSubtask);
     }
-    public ArrayList<Integer> getSubtaskByEpic () {
+    public List<Integer> getSubtaskByEpic () {
         return idSubtasks;
     }
 
-   public void deletSubtaskByEpic (int id) {
+   public void deleteSubtaskByEpic (int id) {
         if(idSubtasks.contains(id)) {
             idSubtasks.remove(id);
         } else {

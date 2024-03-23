@@ -1,6 +1,7 @@
 package service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -12,13 +13,13 @@ public class InMemoryTaskManager implements TaskManager {
     private Map<Integer, Task> listTask;
     private Map<Integer, Subtask> listSubtask;
     private Map<Integer, Epic> listEpic;
-    private InMemoryHistoryManager his;
+    private HistoryManager historyManager;
 
     public InMemoryTaskManager() {
         this.listTask = new HashMap<>();
         this.listSubtask = new HashMap<>();
         this.listEpic = new HashMap<>();
-        his = new InMemoryHistoryManager();
+        historyManager = Managers.getDefaultHistory();
     }
 
     @Override
@@ -93,7 +94,7 @@ public class InMemoryTaskManager implements TaskManager {
         } else {
             int countIsNew = 0;
             int countIsProcess = 0;
-            ArrayList <Integer>  temp = epic.getSubtaskByEpic();
+            List <Integer>  temp = epic.getSubtaskByEpic();
             for(Integer i : temp) {
                 if(listSubtask.get(i).getStatus().equals(Status.NEW)) {
                     countIsNew++;
@@ -133,7 +134,7 @@ public class InMemoryTaskManager implements TaskManager {
         if (listSubtask.containsKey(Id)) {
             Subtask sub = listSubtask.get(Id);
             Epic epic = listEpic.get(sub.getIdEpic());
-            epic.deletSubtaskByEpic(Id);
+            epic.deleteSubtaskByEpic(Id);
             changeStatusByEpic(epic);
             listSubtask.remove(Id);
             System.out.println("подзадача удалена");
@@ -156,7 +157,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Task getTaskById(Integer ID) {
         if (listTask.containsKey(ID)) {
-            his.addHistory(listTask.get(ID));
+            historyManager.addHistory(listTask.get(ID));
             return listTask.get(ID);
         } else {
             System.out.println("задача с таким айди не существует");
@@ -167,7 +168,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Subtask getSubtaskById(Integer ID) {
         if (listSubtask.containsKey(ID)) {
-            his.addHistory(listSubtask.get(ID));
+            historyManager.addHistory(listSubtask.get(ID));
             return listSubtask.get(ID);
         } else {
             System.out.println("нет такой подзадачи");
@@ -178,7 +179,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Epic getEpicById(Integer ID) {
         if (listEpic.containsKey(ID)) {
-            his.addHistory(listEpic.get(ID));
+            historyManager.addHistory(listEpic.get(ID));
             return listEpic.get(ID);
         } else {
             System.out.println("нет такой задачи в эпике");
@@ -197,20 +198,44 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
 
-
-    //у меня вот тут только вопрос это можно интерпретировать как сабтайпинк ?
-    // просто мне кажется что Ad-hoс тут подойдёт лучше
-    @Override
-    public Map<Integer,Task> getTaskList () {
-        return listTask;
-    }
-    @Override
-    public Map<Integer,Subtask> getSubtaskList () {
-        return listSubtask;
-    }
-    @Override
-    public Map<Integer,Epic> getEpicList () {
-        return listEpic;
+    //ВОТ ТУТ НЕМНОГО СОМНЕВАЮСЬ КАКОЙ ЛУЧШЕ ОСТАВИТЬ
+    @Override//ТУТ ОН ПОДХОДИТ И БУДЕТ УНИВЕРСАЛЬНЫЙ
+    public List <? extends Task> getList () {
+        List <Task> tempTask = new ArrayList<>();
+        for(Integer i : listTask.keySet()) {
+            tempTask.add(listTask.get(i));
+        }
+        return tempTask;
     }
 
+    //А ТУТ КАЖДЫЙ РАЗБИТ ПО СВОИМ СТРУКТУРАМ ТАК СКАЗАТЬ
+    //НУЖНА ПОДСКАЗКА :)
+    public List<Task> getListTask () {
+        List <Task> tempTask = new ArrayList<>();
+        for(Integer i : listTask.keySet()) {
+            tempTask.add(listTask.get(i));
+        }
+        return tempTask;
+    }
+
+    public List<Subtask> getListSubtask () {
+        List <Subtask> tempSub = new ArrayList<>();
+        for(Integer i : listSubtask.keySet()) {
+            tempSub.add(listSubtask.get(i));
+        }
+        return tempSub;
+    }
+
+    public List<Epic> getListEpic () {
+        List <Epic> tempEpic = new ArrayList<>();
+        for(Integer i : listSubtask.keySet()) {
+            tempEpic.add(listEpic.get(i));
+        }
+        return tempEpic;
+    }
+
+    @Override
+    public List<Task> getHistory() {
+        return historyManager.getHistory();
+    }
 }
