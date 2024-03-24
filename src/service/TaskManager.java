@@ -37,7 +37,11 @@ public interface TaskManager {
 
     List<Subtask> printTaskForEpic(Epic epic);
 
-    List<? extends Task> getList ();
+    List<Task> getListTask ();
+
+    List<Subtask> getListSubtask ();
+
+    List<Epic> getListEpic ();
 
     List<Task> getHistory();
 

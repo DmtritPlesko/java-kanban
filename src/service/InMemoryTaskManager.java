@@ -197,41 +197,19 @@ public class InMemoryTaskManager implements TaskManager {
         return temp;
     }
 
-
-    //ВОТ ТУТ НЕМНОГО СОМНЕВАЮСЬ КАКОЙ ЛУЧШЕ ОСТАВИТЬ
-    @Override//ТУТ ОН ПОДХОДИТ И БУДЕТ УНИВЕРСАЛЬНЫЙ
-    public List <? extends Task> getList () {
-        List <Task> tempTask = new ArrayList<>();
-        for(Integer i : listTask.keySet()) {
-            tempTask.add(listTask.get(i));
-        }
-        return tempTask;
-    }
-
-    //А ТУТ КАЖДЫЙ РАЗБИТ ПО СВОИМ СТРУКТУРАМ ТАК СКАЗАТЬ
-    //НУЖНА ПОДСКАЗКА :)
+    @Override
     public List<Task> getListTask () {
-        List <Task> tempTask = new ArrayList<>();
-        for(Integer i : listTask.keySet()) {
-            tempTask.add(listTask.get(i));
-        }
-        return tempTask;
+        return new ArrayList<>(listTask.values());
     }
 
+    @Override
     public List<Subtask> getListSubtask () {
-        List <Subtask> tempSub = new ArrayList<>();
-        for(Integer i : listSubtask.keySet()) {
-            tempSub.add(listSubtask.get(i));
-        }
-        return tempSub;
+        return new ArrayList<>(listSubtask.values()) ;
     }
 
+    @Override
     public List<Epic> getListEpic () {
-        List <Epic> tempEpic = new ArrayList<>();
-        for(Integer i : listSubtask.keySet()) {
-            tempEpic.add(listEpic.get(i));
-        }
-        return tempEpic;
+        return new ArrayList<>(listEpic.values());
     }
 
     @Override
