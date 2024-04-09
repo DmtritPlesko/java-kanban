@@ -2,13 +2,16 @@ package service;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import java.util.Map;
 import java.util.HashMap;
 
 import com.yandex.practicum.models.*;
 
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
+
 public class InMemoryTaskManager implements TaskManager {
+
+
     protected int id = 0;
     private Map<Integer, Task> listTask;
     private Map<Integer, Subtask> listSubtask;
@@ -124,6 +127,7 @@ public class InMemoryTaskManager implements TaskManager {
         if (listTask.containsKey(Id)) {
             listTask.remove(Id);
             System.out.println("Задача удалена");
+            historyManager.remove(Id);
         } else {
             System.out.println("нет такой задачи");
         }
@@ -138,6 +142,7 @@ public class InMemoryTaskManager implements TaskManager {
             changeStatusByEpic(epic);
             listSubtask.remove(Id);
             System.out.println("подзадача удалена");
+            historyManager.remove(Id);
         } else {
             System.out.println("невозможно удалить задачу");
         }
@@ -148,7 +153,7 @@ public class InMemoryTaskManager implements TaskManager {
         if (listEpic.containsKey(Id)) {
             listEpic.remove(Id);
             System.out.println("эпик удалён");
-
+            historyManager.remove(Id);
         } else {
             System.out.println("невозможно удалить эпик");
         }
@@ -214,6 +219,6 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public List<Task> getHistory() {
-        return historyManager.getHistory();
+        return historyManager.getTasks();
     }
 }
