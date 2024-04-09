@@ -9,9 +9,15 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     static Map<Integer,Node<Task>> history = new HashMap<>();
 
-    private Node<Task> linkLast (Task task) {
-        Node<Task> node = new Node<>(task);
+    private Node<Task> head;
+    private Node<Task> tail;
 
+
+    private Node<Task> linkLast (Task task) {
+        
+        final Node<Task> tempTail = tail;
+        final Node<Task> node = new Node<>(tempTail,task,null);
+        tail = node;
 
         return node;
     }
@@ -28,11 +34,9 @@ public class InMemoryHistoryManager implements HistoryManager {
             System.out.println("нет такого узла");
         }
     }
-
-
     @Override
     public void addHistory(Task task) {
-        Node<Task> node = new Node<>(task);
+        Node<Task> node = ;
 
         if(history.values().contains(task)) {
             history.remove(task.getId());

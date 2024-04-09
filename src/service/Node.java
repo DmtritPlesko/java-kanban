@@ -10,8 +10,10 @@ public class Node <T> {
         Node<T> next;
         Node<T> prev;
 
-        public Node (T data) {
+        public Node (Node<T> prev,T data,Node<T> next) {
+            this.prev = prev;
             this.data = data;
+            this.next = next;
         }
 
 
