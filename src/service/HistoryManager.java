@@ -8,6 +8,8 @@ public interface HistoryManager {
 
     void addHistory(Task task);
 
-    List<Task> getHistory();
+    List<Task> getTasks();
+
+    void remove(int id);
 
 }
