@@ -6,6 +6,16 @@ import java.util.Objects;
 
 public class Node <T> {
 
+
+    T data;
+    Node<T> next;
+    Node<T> prev;
+
+    public Node (Node<T> prev,T data,Node<T> next) {
+        this.prev = prev;
+        this.data = data;
+        this.next = next;
+    }
         T data;
         Node<T> next;
         Node<T> prev;
@@ -15,6 +25,7 @@ public class Node <T> {
             this.data = data;
             this.next = next;
         }
+
 
     @Override
     public boolean equals(Object o) {
