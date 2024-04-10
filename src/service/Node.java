@@ -16,13 +16,16 @@ public class Node <T> {
             this.next = next;
         }
 
-
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-        return Objects.equals(data, ((Node<T>)o).data);
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Node<T> node = (Node<T>) o;
+        return Objects.equals(data, node.data);
     }
 
 }

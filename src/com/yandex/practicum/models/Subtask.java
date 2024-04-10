@@ -8,11 +8,11 @@ public class Subtask extends Task {
         super(newName, newDescription);
     }
 
-    public void setIdEpic (int id) {
+    public void setIdEpic(int id) {
         this.idEpic = id;
     }
 
-    public int getIdEpic () {
+    public int getIdEpic() {
         return idEpic;
     }
 

@@ -8,28 +8,29 @@ public class Epic extends Task {
 
     private List<Integer> idSubtasks;
 
-    public Epic (String newName,String newDescription) {
-       super(newName,newDescription);
-       idSubtasks = new ArrayList<>();
+    public Epic(String newName, String newDescription) {
+        super(newName, newDescription);
+        idSubtasks = new ArrayList<>();
     }
 
     public void setIdSubtasks(Integer idSubtask) {
         this.idSubtasks.add(idSubtask);
     }
-    public List<Integer> getSubtaskByEpic () {
+
+    public List<Integer> getSubtaskByEpic() {
         return idSubtasks;
     }
 
-   public void deleteSubtaskByEpic (int id) {
-        if(idSubtasks.contains(id)) {
+    public void deleteSubtaskByEpic(int id) {
+        if (idSubtasks.contains(id)) {
             idSubtasks.remove(id);
         } else {
             System.out.println("Невозмодно удалить задачу");
         }
-   }
+    }
 
     @Override
-    public String toString () {
+    public String toString() {
         return "Epic{" +
                 "id=" + idTask +
                 ", idSubtasks=" + idSubtasks +

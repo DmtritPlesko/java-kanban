@@ -7,52 +7,62 @@ import java.util.*;
 
 public class InMemoryHistoryManager implements HistoryManager {
 
-    static Map<Integer,Node<Task>> history = new HashMap<>();
-
+    static Map<Integer, Node<Task>> history = new HashMap<>();
     private Node<Task> head;
     private Node<Task> tail;
 
+    private Node<Task> addLink(Task task) {
+        final Node<Task> oldHead = head;
 
-    private Node<Task> linkLast (Task task) {
-        
         final Node<Task> tempTail = tail;
-        final Node<Task> node = new Node<>(tempTail,task,null);
-        tail = node;
+        Node<Task> node ;
+        if(history.keySet().size() == 0) { //если история пустая то новый элемент будет и головой и хвостом
+            node = new Node<>(null, task, oldHead);
+            tail = node;
+            head = node;
+        } else {
+            node = new Node<>(oldHead, task, tempTail);
+            tail = node;
+            head = tempTail;
+        }
 
         return node;
     }
 
-    public void removeNode(Node<Task> noda) {
+    public  void removeNode(Node<Task> noda) {
         if (history.containsValue(noda)) {
-            for(Integer temp : history.keySet()) {
-                if(history.get(temp).equals(noda)) {
-                    history.remove(temp);
-                    break;
-                }
-            }
+            head.next = history.get(noda.data.getId()).next;
+            tail.prev = history.get(noda.data.getId()).prev;
+            history.remove(noda.data.getId());
+            System.out.println("Узел удалён");
         } else {
             System.out.println("нет такого узла");
         }
+
     }
+
+
     @Override
     public void addHistory(Task task) {
-        Node<Task> node = ;
+        Node<Task> node = addLink(task);
 
-        if(history.values().contains(task)) {
+        if (history.containsValue(node)) {
             history.remove(task.getId());
         }
 
-        history.put(task.getId(),node);
+        history.put(task.getId(), node);
 
     }
+
     @Override
     public List<Task> getTasks() {
         List<Task> tempHistory = new ArrayList<>();
-        for(Integer temp : history.keySet()) {
+        for (Integer temp : history.keySet()) {
             tempHistory.add(history.get(temp).data);
         }
         return tempHistory;
     }
+
     @Override
     public void remove(int id) {
         history.remove(id);
