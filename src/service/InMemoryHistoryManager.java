@@ -9,17 +9,17 @@ import java.util.Map;
 import java.util.HashMap;
 
 public class InMemoryHistoryManager implements HistoryManager {
-
     static Map<Integer, Node<Task>> history = new HashMap<>();
     private Node<Task> head;
     private Node<Task> tail;
-    
-    private Node <Task> addLink(Task task) {
+
+    private Node<Task> addLink(Task task) {
+
         final Node<Task> oldHead = head;
 
         final Node<Task> tempTail = tail;
-        Node<Task> node ;
-        if(history.keySet().size() == 0) { //если история пустая то новый элемент будет и головой и хвостом
+        Node<Task> node;
+        if (history.keySet().size() == 0) { //если история пустая то новый элемент будет и головой и хвостом
             node = new Node<>(null, task, oldHead);
             tail = node;
             head = node;
@@ -32,19 +32,15 @@ public class InMemoryHistoryManager implements HistoryManager {
         return node;
     }
 
-    public  void removeNode(Node<Task> noda) {
+    public void removeNode(Node<Task> noda) {
         if (history.containsValue(noda)) {
             head.setNext(history.get(noda.getData().getId()).getNext());
             tail.setPrev(history.get(noda.getData().getId()).getPrev());
             history.remove(noda.getData().getId());
-            head.next = history.get(noda.data.getId()).next;
-            tail.prev = history.get(noda.data.getId()).prev;
-            history.remove(noda.data.getId());
             System.out.println("Узел удалён");
         } else {
             System.out.println("нет такого узла");
         }
-
     }
 
 
@@ -65,7 +61,6 @@ public class InMemoryHistoryManager implements HistoryManager {
         List<Task> tempHistory = new ArrayList<>();
         for (Integer temp : history.keySet()) {
             tempHistory.add(history.get(temp).getData());
-            tempHistory.add(history.get(temp).data);
         }
         return tempHistory;
     }
