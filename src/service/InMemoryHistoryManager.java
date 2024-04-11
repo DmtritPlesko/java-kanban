@@ -1,6 +1,5 @@
 package service;
 
-import com.yandex.practicum.models.Epic;
 import com.yandex.practicum.models.Task;
 import com.yandex.practicum.models.Node;
 
@@ -14,7 +13,8 @@ public class InMemoryHistoryManager implements HistoryManager {
     static Map<Integer, Node<Task>> history = new HashMap<>();
     private Node<Task> head;
     private Node<Task> tail;
-    private Node<Task> addLink(Task task) {
+    
+    private Node <Task> addLink(Task task) {
         final Node<Task> oldHead = head;
 
         final Node<Task> tempTail = tail;
