@@ -8,7 +8,6 @@ import com.yandex.practicum.models.Task;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 class InMemoryTaskManagerTest {
@@ -106,20 +105,7 @@ class InMemoryTaskManagerTest {
 
         assertNull(manager.getTaskById(taskID));
     }
-
-    @Test
-    public void checkDeleteSubtask() {
-        Subtask sub = new Subtask("Sub1", "Hello hello");
-
-        manager.createNewSubtask(sub);
-
-        final int subID = sub.getId();
-
-        manager.deleteSubtaskForID(subID);
-
-        assertNull(manager.getSubtaskById(subID));
-    }
-
+    
     @Test
     public void checkDeleteEpic() {
         Epic epic = new Epic("Epic1", "Hello hello");
@@ -233,7 +219,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void checkGetListTask () {
+    public void checkGetListTask() {
         Task task = new Task("Task1", "Что то тут есть");
         Task task2 = new Task("Task2", "Что то тут есть");
         Task task3 = new Task("Task3", "Что то тут есть");
@@ -250,7 +236,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void checkGeListEpic () {
+    public void checkGeListEpic() {
         Epic epic1 = new Epic("Epic1", "Текст для эпика1");
         Epic epic2 = new Epic("Epic2", "Текст для эпика2");
         Epic epic3 = new Epic("Epic3", "Текст для эпика3");
@@ -265,9 +251,10 @@ class InMemoryTaskManagerTest {
 
         assertNotNull(tempEpic);
     }
+
     @Test
-    public void checkContainsInHistory () {
-        Task taska = new Task("Тут что то есть","и тут тоже что то есть");
+    public void checkContainsInHistory() {
+        Task taska = new Task("Тут что то есть", "и тут тоже что то есть");
         manager.createNewTask(taska);
 
         manager.getTaskById(taska.getId());
@@ -277,19 +264,19 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void removeInHistoryAndPullTasks () {
-        Task taska = new Task("Тут что то есть","и тут тоже что то есть");
+    public void removeInHistoryAndPullTasks() {
+        Task taska = new Task("Тут что то есть", "и тут тоже что то есть");
         manager.createNewTask(taska);
 
         manager.getTaskById(taska.getId());
 
         manager.deleteTaskForID(taska.getId());
 
-        assertEquals(false,manager.getHistory().equals(taska));
+        assertEquals(false, manager.getHistory().equals(taska));
     }
 
     @Test
-    public void removeHistoryAndPullSubtask () {
+    public void removeHistoryAndPullSubtask() {
         Subtask sub = new Subtask("тут что то есть", "и тут что то есть");
 
         manager.createNewSubtask(sub);

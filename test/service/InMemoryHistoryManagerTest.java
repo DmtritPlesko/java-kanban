@@ -11,26 +11,27 @@ class InMemoryHistoryManagerTest {
     public static InMemoryHistoryManager manager;
 
     @BeforeAll
-    public static void setUp () {
+    public static void setUp() {
         manager = new InMemoryHistoryManager();
     }
+
     @Test
     void ChekRemoveNodeFromTask() {
-        Task task = new Task("Тут что то есть","И тут тоже что то есть");
+        Task task = new Task("Тут что то есть", "И тут тоже что то есть");
 
         manager.addHistory(task);
 
         assertNotNull(manager.getTasks());
 
-        Node<Task> noda = new Node<>(null,task,null);
+        Node<Task> noda = new Node<>(null, task, null);
         manager.removeNode(noda);
 
-        assertEquals(false,manager.getTasks().equals(task));
+        assertEquals(false, manager.getTasks().equals(task));
     }
 
     @Test
     void addHistory() {
-        Task task = new Task("Тут что то есть ","Тут тоже есть что то");
+        Task task = new Task("Тут что то есть ", "Тут тоже есть что то");
         manager.addHistory(task);
 
         assertNotNull(manager.getTasks());
