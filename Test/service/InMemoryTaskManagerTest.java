@@ -265,4 +265,40 @@ class InMemoryTaskManagerTest {
 
         assertNotNull(tempEpic);
     }
+    @Test
+    public void checkContainsInHistory () {
+        Task taska = new Task("Тут что то есть","и тут тоже что то есть");
+        manager.createNewTask(taska);
+
+        manager.getTaskById(taska.getId());
+
+
+        assertNotNull(manager.getHistory());
+    }
+
+    @Test
+    public void removeInHistoryAndPullTasks () {
+        Task taska = new Task("Тут что то есть","и тут тоже что то есть");
+        manager.createNewTask(taska);
+
+        manager.getTaskById(taska.getId());
+
+        manager.deleteTaskForID(taska.getId());
+
+        assertEquals(false,manager.getHistory().equals(taska));
+    }
+
+    @Test
+    public void removeHistoryAndPullSubtask () {
+        Subtask sub = new Subtask("тут что то есть", "и тут что то есть");
+
+        manager.createNewSubtask(sub);
+
+        final int subID = sub.getId();
+
+        manager.getSubtaskById(sub.getId());
+
+        assertNotNull(manager.getHistory());
+
+    }
 }
