@@ -1,8 +1,10 @@
 package service;
 
+import com.yandex.practicum.models.Epic;
 import com.yandex.practicum.models.Task;
 
 import java.util.List;
+import java.util.Objects;
 
 public interface HistoryManager {
 

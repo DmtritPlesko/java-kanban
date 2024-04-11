@@ -38,6 +38,5 @@ class InMemoryHistoryManagerTest {
 
     @Test
     void checkRemoveHistoryById() {
-
     }
 }

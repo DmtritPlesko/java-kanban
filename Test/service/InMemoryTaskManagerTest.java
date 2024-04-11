@@ -233,7 +233,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void checkGetListTask () {
+    public void checkGetListTask() {
         Task task = new Task("Task1", "Что то тут есть");
         Task task2 = new Task("Task2", "Что то тут есть");
         Task task3 = new Task("Task3", "Что то тут есть");
@@ -250,7 +250,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void checkGeListEpic () {
+    public void checkGeListEpic() {
         Epic epic1 = new Epic("Epic1", "Текст для эпика1");
         Epic epic2 = new Epic("Epic2", "Текст для эпика2");
         Epic epic3 = new Epic("Epic3", "Текст для эпика3");
@@ -265,6 +265,7 @@ class InMemoryTaskManagerTest {
 
         assertNotNull(tempEpic);
     }
+
     @Test
     public void checkContainsInHistory () {
         Task taska = new Task("Тут что то есть","и тут тоже что то есть");

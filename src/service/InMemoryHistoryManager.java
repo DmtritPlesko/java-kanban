@@ -1,5 +1,6 @@
 package service;
 
+import com.yandex.practicum.models.Epic;
 import com.yandex.practicum.models.Task;
 import com.yandex.practicum.models.Node;
 
@@ -13,6 +14,13 @@ public class InMemoryHistoryManager implements HistoryManager {
     private Node<Task> head;
     private Node<Task> tail;
 
+import java.util.*;
+
+public class InMemoryHistoryManager implements HistoryManager {
+
+    static Map<Integer, Node<Task>> history = new HashMap<>();
+    private Node<Task> head;
+    private Node<Task> tail;
     private Node<Task> addLink(Task task) {
         final Node<Task> oldHead = head;
 
@@ -36,6 +44,9 @@ public class InMemoryHistoryManager implements HistoryManager {
             head.setNext(history.get(noda.getData().getId()).getNext());
             tail.setPrev(history.get(noda.getData().getId()).getPrev());
             history.remove(noda.getData().getId());
+            head.next = history.get(noda.data.getId()).next;
+            tail.prev = history.get(noda.data.getId()).prev;
+            history.remove(noda.data.getId());
             System.out.println("Узел удалён");
         } else {
             System.out.println("нет такого узла");
@@ -61,6 +72,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         List<Task> tempHistory = new ArrayList<>();
         for (Integer temp : history.keySet()) {
             tempHistory.add(history.get(temp).getData());
+            tempHistory.add(history.get(temp).data);
         }
         return tempHistory;
     }
