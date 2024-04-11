@@ -24,17 +24,17 @@ public interface TaskManager {
 
     void deleteAllTask();
 
-    void deleteTaskForID(Integer Id);
+    void deleteTaskForID(Integer identef);
 
-    void deleteSubtaskForID(Integer Id);
+    void deleteSubtaskForID(Integer identef);
 
-    void deleteEpicForID(Integer Id);
+    void deleteEpicForID(Integer identef);
 
-    Task getTaskById(Integer ID);
+    Task getTaskById(Integer identef);
 
-    Subtask getSubtaskById(Integer ID);
+    Subtask getSubtaskById(Integer identef);
 
-    Epic getEpicById(Integer ID);
+    Epic getEpicById(Integer identef);
 
     List<Subtask> printTaskForEpic(Epic epic);
 
