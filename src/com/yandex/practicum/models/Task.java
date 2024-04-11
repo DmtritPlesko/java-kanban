@@ -29,9 +29,11 @@ public class Task {
     public Status getStatus() {
         return status;
     }
+
     public void setID(Integer id) {
         this.idTask = id;
     }
+
     @Override
     public String toString() {
         return "Task{" +
