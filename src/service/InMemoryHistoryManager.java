@@ -3,72 +3,92 @@ package service;
 import com.yandex.practicum.models.Task;
 import com.yandex.practicum.models.Node;
 
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.HashMap;
+import java.util.*;
 
 public class InMemoryHistoryManager implements HistoryManager {
-    static Map<Integer, Node<Task>> history = new HashMap<>();
-    private Node<Task> head;
-    private Node<Task> tail;
+    static Map<Integer, Node> history = new HashMap<>();
+    private Node head;
+    private Node tail;
 
-    private Node<Task> addLink(Task task) {
+    private Node addLink(Task task) {
 
-        final Node<Task> oldHead = head;
-
-        final Node<Task> tempTail = tail;
-        Node<Task> node;
-        if (history.keySet().size() == 0) { //если история пустая то новый элемент будет и головой и хвостом
-            node = new Node<>(null, task, oldHead);
-            tail = node;
-            head = node;
+        if (head == null) {
+            head = new Node(null, task, null);
+            return head;
+        } else if (tail == null) {
+            tail = new Node(head, task, null);
+            head.setNext(tail);
+            return tail;
         } else {
-            node = new Node<>(oldHead, task, tempTail);
+            final Node oldTail = tail;
+            Node node = new Node(oldTail, task, null);
+            oldTail.setNext(node);
             tail = node;
-            head = tempTail;
-        }
-
-        return node;
-    }
-
-    public void removeNode(Node<Task> noda) {
-        if (history.containsValue(noda)) {
-            head.setNext(history.get(noda.getData().getId()).getNext());
-            tail.setPrev(history.get(noda.getData().getId()).getPrev());
-            history.remove(noda.getData().getId());
-            System.out.println("Узел удалён");
-        } else {
-            System.out.println("нет такого узла");
+            return node;
         }
     }
 
+
+    private void removeNode(Node node) {
+
+        final Node next = node.getNext();
+        final Node prev = node.getPrev();
+
+        if (node == null) {
+            return;
+        }
+
+        if (node == head) {
+            head = next;
+        }
+
+        if (node == tail) {
+            tail = prev;
+        }
+
+        if (prev != null) {
+            prev.setNext(node.getNext());
+        }
+
+        if (next != null) {
+            next.setPrev(node.getPrev());
+        }
+    }
 
     @Override
     public void addHistory(Task task) {
-        Node<Task> node = addLink(task);
 
-        if (history.containsValue(node)) {
+        if (history.containsKey(task.getId())) {
+            removeNode(history.get(task.getId()));
             history.remove(task.getId());
         }
 
-        history.put(task.getId(), node);
+
+        history.put(task.getId(),addLink(task));
 
     }
 
     @Override
-    public List<Task> getTasks() {
+    public List<Task> getHistory() {
         List<Task> tempHistory = new ArrayList<>();
-        for (Integer temp : history.keySet()) {
-            tempHistory.add(history.get(temp).getData());
+        Node node = head;
+        while (node != null) {
+            tempHistory.add(node.getData());
+            node = node.getNext();
         }
         return tempHistory;
     }
 
     @Override
     public void remove(int id) {
+
+        Node node = history.get(id);
+
         history.remove(id);
+
+        removeNode(node);
     }
 
 }
+
 

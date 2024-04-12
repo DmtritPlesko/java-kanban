@@ -1,44 +1,61 @@
 package service;
 
 import com.yandex.practicum.models.Task;
-import com.yandex.practicum.models.Node;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class InMemoryHistoryManagerTest {
-    public static InMemoryHistoryManager manager;
+    public static HistoryManager manager;
+
+    public static InMemoryTaskManager taskManager;
 
     @BeforeAll
     public static void setUp() {
         manager = new InMemoryHistoryManager();
+        taskManager = new InMemoryTaskManager();
     }
 
     @Test
-    void ChekRemoveNodeFromTask() {
+    public void testRemoveNodeTask() {
         Task task = new Task("Тут что то есть", "И тут тоже что то есть");
+
+        task.setID(1);
 
         manager.addHistory(task);
 
-        assertNotNull(manager.getTasks());
+        manager.remove(task.getId());
 
-        Node<Task> noda = new Node<>(null, task, null);
-        manager.removeNode(noda);
-
-        assertEquals(false, manager.getTasks().equals(task));
+        assertEquals(false, manager.getHistory().contains(task));
     }
 
     @Test
     void addHistory() {
         Task task = new Task("Тут что то есть ", "Тут тоже есть что то");
+
+        taskManager.createNewTask(task);
+
         manager.addHistory(task);
 
-        assertNotNull(manager.getTasks());
+        assertNotNull(manager.getHistory());
     }
 
     @Test
-    void checkRemoveHistoryById() {
+    public void testGetHistory() {
 
+        Task task = new Task("Тут что то есть ", "Тут тоже есть что то");
+        Task task1 = new Task("Тут что то есть ", "Тут тоже есть что то");
+        Task task2 = new Task("Тут что то есть ", "Тут тоже есть что то");
+        Task task3 = new Task("Тут что то есть ", "Тут тоже есть что то");
+        manager.addHistory(task);
+        manager.addHistory(task1);
+        manager.addHistory(task2);
+        manager.addHistory(task3);
+
+
+        assertEquals(2, manager.getHistory().size());
     }
+
+
 }

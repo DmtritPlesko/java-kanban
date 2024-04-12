@@ -21,7 +21,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void IDEqualityCheckFromTask() {
+    public void idEqualityCheckFromTask() {
         Task task = new Task("Task1", "Что то тут есть");
 
         task.setID(1);
@@ -35,7 +35,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void IDEqualityCheckFromSubtask() {
+    public void idEqualityCheckFromSubtask() {
         Subtask sub = new Subtask("Sub", "hello world");
 
         sub.setID(1);
@@ -48,7 +48,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void IDEqualityCheckFromEpic() {
+    public void idEqualityCheckFromEpic() {
         Epic epic = new Epic("Epic1", "Hello Hello");
         epic.setID(1);
 
@@ -99,13 +99,15 @@ class InMemoryTaskManagerTest {
 
         manager.createNewTask(task);
 
+
         final int taskID = task.getId();
+        manager.getTaskById(taskID);
 
         manager.deleteTaskForID(taskID);
 
         assertNull(manager.getTaskById(taskID));
     }
-    
+
     @Test
     public void checkDeleteEpic() {
         Epic epic = new Epic("Epic1", "Hello hello");
@@ -113,6 +115,7 @@ class InMemoryTaskManagerTest {
         manager.createNewEpic(epic);
 
         final int epicID = epic.getId();
+        manager.getEpicById(epicID);
 
         manager.deleteEpicForID(epicID);
 
@@ -254,13 +257,12 @@ class InMemoryTaskManagerTest {
 
     @Test
     public void checkContainsInHistory() {
-        Task taska = new Task("Тут что то есть", "и тут тоже что то есть");
-        manager.createNewTask(taska);
+        Task task = new Task("Тут что то есть", "и тут тоже что то есть");
+        manager.createNewTask(task);
 
-        manager.getTaskById(taska.getId());
+        manager.getTaskById(task.getId());
 
-
-        assertNotNull(manager.getHistory());
+        assertEquals(true, manager.getHistory().contains(task));
     }
 
     @Test
@@ -275,17 +277,4 @@ class InMemoryTaskManagerTest {
         assertEquals(false, manager.getHistory().equals(taska));
     }
 
-    @Test
-    public void removeHistoryAndPullSubtask() {
-        Subtask sub = new Subtask("тут что то есть", "и тут что то есть");
-
-        manager.createNewSubtask(sub);
-
-        final int subID = sub.getId();
-
-        manager.getSubtaskById(sub.getId());
-
-        assertNotNull(manager.getHistory());
-
-    }
 }

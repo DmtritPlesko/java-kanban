@@ -120,9 +120,10 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void deleteTaskForID(Integer identef) {
-        if (listTask.containsKey(identef)) {
-            listTask.remove(identef);
+    public void deleteTaskForID(Integer id) {
+        if (listTask.containsKey(id)) {
+            listTask.remove(id);
+            historyManager.remove(id);
             System.out.println("Задача удалена");
         } else {
             System.out.println("нет такой задачи");
@@ -130,13 +131,14 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void deleteSubtaskForID(Integer identef) {
-        if (listSubtask.containsKey(identef)) {
-            Subtask sub = listSubtask.get(identef);
+    public void deleteSubtaskForID(Integer id) {
+        if (listSubtask.containsKey(id)) {
+            Subtask sub = listSubtask.get(id);
             Epic epic = listEpic.get(sub.getIdEpic());
-            epic.deleteSubtaskByEpic(identef);
+            epic.deleteSubtaskByEpic(id);
             changeStatusByEpic(epic);
-            listSubtask.remove(identef);
+            listSubtask.remove(id);
+            historyManager.remove(id);
             System.out.println("подзадача удалена");
         } else {
             System.out.println("невозможно удалить задачу");
@@ -144,9 +146,10 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void deleteEpicForID(Integer identef) {
-        if (listEpic.containsKey(identef)) {
-            listEpic.remove(identef);
+    public void deleteEpicForID(Integer id) {
+        if (listEpic.containsKey(id)) {
+            listEpic.remove(id);
+            historyManager.remove(id);
             System.out.println("эпик удалён");
 
         } else {
@@ -155,10 +158,10 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Task getTaskById(Integer identef) {
-        if (listTask.containsKey(identef)) {
-            historyManager.addHistory(listTask.get(identef));
-            return listTask.get(identef);
+    public Task getTaskById(Integer id) {
+        if (listTask.containsKey(id)) {
+            historyManager.addHistory(listTask.get(id));
+            return listTask.get(id);
         } else {
             System.out.println("задача с таким айди не существует");
         }
@@ -166,10 +169,10 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Subtask getSubtaskById(Integer identef) {
-        if (listSubtask.containsKey(identef)) {
-            historyManager.addHistory(listSubtask.get(identef));
-            return listSubtask.get(identef);
+    public Subtask getSubtaskById(Integer id) {
+        if (listSubtask.containsKey(id)) {
+            historyManager.addHistory(listSubtask.get(id));
+            return listSubtask.get(id);
         } else {
             System.out.println("нет такой подзадачи");
         }
@@ -177,10 +180,10 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Epic getEpicById(Integer identef) {
-        if (listEpic.containsKey(identef)) {
-            historyManager.addHistory(listEpic.get(identef));
-            return listEpic.get(identef);
+    public Epic getEpicById(Integer id) {
+        if (listEpic.containsKey(id)) {
+            historyManager.addHistory(listEpic.get(id));
+            return listEpic.get(id);
         } else {
             System.out.println("нет такой задачи в эпике");
         }
@@ -214,7 +217,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public List<Task> getHistory() {
-        return historyManager.getTasks();
+        return historyManager.getHistory();
     }
 }
 

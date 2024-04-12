@@ -2,13 +2,13 @@ package com.yandex.practicum.models;
 
 import java.util.Objects;
 
-public class Node<T> {
+public class Node {
 
-    private T data;
-    private Node<T> next;
-    private Node<T> prev;
+    private Task data;
+    private Node next;
+    private Node prev;
 
-    public Node(Node<T> prev, T data, Node<T> next) {
+    public Node(Node prev, Task data, Node next) {
         this.prev = prev;
         this.data = data;
         this.next = next;
@@ -22,27 +22,27 @@ public class Node<T> {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Node<T> node = (Node<T>) o;
+        Node node = (Node) o;
         return Objects.equals(data, node.data);
     }
 
-    public T getData() {
+    public Task getData() {
         return data;
     }
 
-    public Node<T> getNext() {
+    public Node getNext() {
         return next;
     }
 
-    public Node<T> getPrev() {
+    public Node getPrev() {
         return prev;
     }
 
-    public void setNext(Node<T> next) {
+    public void setNext(Node next) {
         this.next = next;
     }
 
-    public void setPrev(Node<T> prev) {
+    public void setPrev(Node prev) {
         this.prev = prev;
     }
 
