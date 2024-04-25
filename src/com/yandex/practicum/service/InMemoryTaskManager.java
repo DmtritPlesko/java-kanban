@@ -1,4 +1,4 @@
-package service;
+package com.yandex.practicum.service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.HashMap;
 
 import com.yandex.practicum.models.*;
+import com.yandex.practicum.intr.HistoryManager;
+import com.yandex.practicum.intr.TaskManager;
 
 public class InMemoryTaskManager implements TaskManager {
     protected int id = 0;

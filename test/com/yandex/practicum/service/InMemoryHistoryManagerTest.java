@@ -1,6 +1,7 @@
-package service;
+package com.yandex.practicum.service;
 
 import com.yandex.practicum.models.Task;
+import com.yandex.practicum.intr.HistoryManager;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 

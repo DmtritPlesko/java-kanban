@@ -1,6 +1,6 @@
-package service;
-
 import com.yandex.practicum.models.*;
+import com.yandex.practicum.intr.TaskManager;
+import com.yandex.practicum.service.InMemoryTaskManager;
 
 public class Main {
     public static void main(String[] args) {

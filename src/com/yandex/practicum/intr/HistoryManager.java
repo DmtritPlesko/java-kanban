@@ -1,4 +1,4 @@
-package service;
+package com.yandex.practicum.intr;
 
 import com.yandex.practicum.models.Task;
 

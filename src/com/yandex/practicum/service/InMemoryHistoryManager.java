@@ -1,7 +1,8 @@
-package service;
+package com.yandex.practicum.service;
 
 import com.yandex.practicum.models.Task;
 import com.yandex.practicum.models.Node;
+import com.yandex.practicum.intr.HistoryManager;
 
 import java.util.*;
 
