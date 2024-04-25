@@ -29,9 +29,11 @@ public class Task {
     public Status getStatus() {
         return status;
     }
+
     public void setID(Integer id) {
         this.idTask = id;
     }
+
     @Override
     public String toString() {
         return "Task{" +
@@ -47,7 +49,7 @@ public class Task {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Task task = (Task) o;
-        return Objects.equals(name, task.name) && Objects.equals(description, task.description) && Objects.equals(idTask, task.idTask) && status == task.status;
+        return Objects.equals(name, task.name) && Objects.equals(description, task.description);
     }
 
     @Override

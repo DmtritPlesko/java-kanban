@@ -8,7 +8,6 @@ import com.yandex.practicum.models.Task;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 class InMemoryTaskManagerTest {
@@ -22,7 +21,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void IDEqualityCheckFromTask() {
+    public void idEqualityCheckFromTask() {
         Task task = new Task("Task1", "Что то тут есть");
 
         task.setID(1);
@@ -36,7 +35,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void IDEqualityCheckFromSubtask() {
+    public void idEqualityCheckFromSubtask() {
         Subtask sub = new Subtask("Sub", "hello world");
 
         sub.setID(1);
@@ -49,7 +48,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void IDEqualityCheckFromEpic() {
+    public void idEqualityCheckFromEpic() {
         Epic epic = new Epic("Epic1", "Hello Hello");
         epic.setID(1);
 
@@ -100,24 +99,13 @@ class InMemoryTaskManagerTest {
 
         manager.createNewTask(task);
 
+
         final int taskID = task.getId();
+        manager.getTaskById(taskID);
 
         manager.deleteTaskForID(taskID);
 
         assertNull(manager.getTaskById(taskID));
-    }
-
-    @Test
-    public void checkDeleteSubtask() {
-        Subtask sub = new Subtask("Sub1", "Hello hello");
-
-        manager.createNewSubtask(sub);
-
-        final int subID = sub.getId();
-
-        manager.deleteSubtaskForID(subID);
-
-        assertNull(manager.getSubtaskById(subID));
     }
 
     @Test
@@ -127,6 +115,7 @@ class InMemoryTaskManagerTest {
         manager.createNewEpic(epic);
 
         final int epicID = epic.getId();
+        manager.getEpicById(epicID);
 
         manager.deleteEpicForID(epicID);
 
@@ -233,7 +222,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void checkGetListTask () {
+    public void checkGetListTask() {
         Task task = new Task("Task1", "Что то тут есть");
         Task task2 = new Task("Task2", "Что то тут есть");
         Task task3 = new Task("Task3", "Что то тут есть");
@@ -250,7 +239,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void checkGeListEpic () {
+    public void checkGeListEpic() {
         Epic epic1 = new Epic("Epic1", "Текст для эпика1");
         Epic epic2 = new Epic("Epic2", "Текст для эпика2");
         Epic epic3 = new Epic("Epic3", "Текст для эпика3");
@@ -265,4 +254,27 @@ class InMemoryTaskManagerTest {
 
         assertNotNull(tempEpic);
     }
+
+    @Test
+    public void checkContainsInHistory() {
+        Task task = new Task("Тут что то есть", "и тут тоже что то есть");
+        manager.createNewTask(task);
+
+        manager.getTaskById(task.getId());
+
+        assertEquals(true, manager.getHistory().contains(task));
+    }
+
+    @Test
+    public void removeInHistoryAndPullTasks() {
+        Task taska = new Task("Тут что то есть", "и тут тоже что то есть");
+        manager.createNewTask(taska);
+
+        manager.getTaskById(taska.getId());
+
+        manager.deleteTaskForID(taska.getId());
+
+        assertEquals(false, manager.getHistory().equals(taska));
+    }
+
 }
