@@ -27,15 +27,15 @@ public class Node {
     }
 
     public Task getData() {
-        return data;
+        return this.data;
     }
 
     public Node getNext() {
-        return next;
+        return this.next;
     }
 
     public Node getPrev() {
-        return prev;
+        return this.prev;
     }
 
     public void setNext(Node next) {

@@ -1,4 +1,4 @@
-package com.yandex.practicum.intr;
+package com.yandex.practicum.intrerfaces;
 
 import com.yandex.practicum.models.Task;
 

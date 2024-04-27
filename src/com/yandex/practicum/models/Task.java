@@ -1,5 +1,7 @@
 package com.yandex.practicum.models;
 
+import com.yandex.practicum.enums.Status;
+
 import java.util.Objects;
 
 public class Task {
@@ -15,11 +17,15 @@ public class Task {
     }
 
     public Integer getId() {
-        return idTask;
+        return this.idTask;
     }
 
     public String getName() {
         return this.name;
+    }
+
+    public String getDescription() {
+        return this.description;
     }
 
     public void setStatus(Status status) {
@@ -32,16 +38,6 @@ public class Task {
 
     public void setID(Integer id) {
         this.idTask = id;
-    }
-
-    @Override
-    public String toString() {
-        return "Task{" +
-                "name='" + name + '\'' +
-                ", description.length ='" + description.length() + '\'' +
-                ", idTask=" + idTask +
-                ", status=" + status +
-                '}';
     }
 
     @Override

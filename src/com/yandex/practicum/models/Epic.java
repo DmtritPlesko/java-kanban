@@ -1,8 +1,8 @@
 package com.yandex.practicum.models;
 
-import java.util.ArrayList;
 import java.util.Objects;
 import java.util.List;
+import java.util.ArrayList;
 
 public class Epic extends Task {
 
@@ -28,19 +28,6 @@ public class Epic extends Task {
             System.out.println("Невозмодно удалить задачу");
         }
     }
-
-    @Override
-    public String toString() {
-        return "Epic{" +
-                "id=" + idTask +
-                ", idSubtasks=" + idSubtasks +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", idTask=" + idTask +
-                ", status=" + status +
-                '}';
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

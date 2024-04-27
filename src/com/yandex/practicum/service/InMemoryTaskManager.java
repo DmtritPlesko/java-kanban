@@ -6,9 +6,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 
+import com.yandex.practicum.enums.Status;
 import com.yandex.practicum.models.*;
-import com.yandex.practicum.intr.HistoryManager;
-import com.yandex.practicum.intr.TaskManager;
+import com.yandex.practicum.intrerfaces.HistoryManager;
+import com.yandex.practicum.intrerfaces.TaskManager;
 
 public class InMemoryTaskManager implements TaskManager {
     protected int id = 0;
@@ -32,7 +33,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void createNewTask(Task task) {
+    public void createNewTask(Task task)  {
         id++;
         task.setID(id);
         task.setStatus(Status.NEW);
@@ -52,7 +53,7 @@ public class InMemoryTaskManager implements TaskManager {
 
 
     @Override
-    public void createNewSubtask(Subtask subtask) {
+    public void createNewSubtask(Subtask subtask){
         id++;//добавил
         subtask.setStatus(Status.NEW);
         subtask.setID(id);
