@@ -1,24 +1,39 @@
 package com.yandex.practicum.service;
 
 import com.yandex.practicum.intrerfaces.TaskManager;
+import com.yandex.practicum.models.Subtask;
 import com.yandex.practicum.models.Task;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class FileBackedTaskManagerTest {
-    private static TaskManager manager;
+    public static TaskManager manager;
 
     @BeforeAll
-    public static void setup() {
-
+    public static void setup() throws FileNotFoundException {
+        manager = new FileBackedTaskManager("output.csv");
     }
+
     @Test
-    public void checkCreateNewTask () {
-        Task task = new Task("Тут что то есть","и тут что то есть");
+    public void createAndSaveTaskFromFile() throws IOException {
+        Task task = new Task("qwfq", "qwfqwf");
 
+        manager.createNewTask(task);
 
+        assertNotNull(manager.getListTask());
     }
 
+    @Test
+    public void createAndSaveSubForFile() throws IOException {
+        Subtask subtask = new Subtask("а туту ужэе будет саб", "qwfqwfqwf");
+
+        manager.createNewSubtask(subtask);
+
+        assertNotNull(manager.getHistory());
+    }
 }

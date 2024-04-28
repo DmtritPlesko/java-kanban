@@ -5,27 +5,22 @@ import com.yandex.practicum.models.*;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.List;
-import java.util.ArrayList;
+import java.util.*;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
-    InMemoryTaskManager manager;
     private static File file;
     private Map<Integer, Task> listTask;
     private Map<Integer, Subtask> listSubtask;
     private Map<Integer, Epic> listEpic;
-
-
     private List<Task> tempTask;
+    private static int count = 1;
 
     public FileBackedTaskManager(String fileName) throws FileNotFoundException {
-        file = new File(fileName + ".txt");
-        manager = new InMemoryTaskManager();
+        file = new File(fileName);
         listTask = new HashMap<>();
         listSubtask = new HashMap<>();
         listEpic = new HashMap<>();
+        loadFromFile();
     }
 
     private void save() {
@@ -34,66 +29,83 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             for (Task task : tempTask) {
                 writer.write(toString(task));
             }
-
         } catch (IOException error) {
             System.out.println("Ошибка при записи в файл");
         }
     }
 
-    private String toString(Task task) {
+    public String toString(Task task) {
 
-        String temp = task.getId().toString() + "," + initTypeTask(task)  + "," + task.getName()
+        String temp = count + "," + task.getId().toString() + "," + initTypeTask(task) + "," + task.getName()
                 + "," + task.getStatus() + "," + task.getDescription();
-
+        count++;
         return temp;
     }
 
     private String initTypeTask(Task task) {
         Object obj = task;
-        if (obj instanceof Task) {
+        if (task.getClass().toString().equals("Task")) {
             return "Task";
-        } else if (obj instanceof Subtask) {
+        } else if (task.getClass().toString().equals("Subtask")) {
             return "Subtask";
         } else {
             return "Epic";
         }
     }
 
-    private Task fromString(String value) {
-        String[] tempTask;
-        tempTask = value.split(",");
-        Task task = new Task(tempTask[2], tempTask[4]);
-        task.setID(Integer.parseInt(tempTask[0]));
-        if (tempTask[3].equals(Status.NEW.toString())) {
-            task.setStatus(Status.NEW);
-        } else if (tempTask[3].equals(Status.IN_PROGRESS.toString())) {
-            task.setStatus(Status.IN_PROGRESS);
-        } else {
-            task.setStatus(Status.DONE);
-        }
+    private <T extends Task> T createObj(String value) {
+        Object obj = null;
+        String[] tempLine = value.split(",");
+        switch (tempLine[3]) {
+            case "Task": {
+                Task task = new Task(tempLine[3], tempLine[5]);
+                task.setStatus(takeStatus(tempLine[4]));
+                task.setID(Integer.parseInt(tempLine[1]));
+                obj = task;
+                break;
+            }
+            case "Subtask": {
+                Subtask sub = new Subtask(tempLine[3], tempLine[5]);
+                sub.setStatus(takeStatus(tempLine[4]));
+                sub.setID(Integer.parseInt(tempLine[1]));
+                obj = sub;
+                break;
+            }
+            case "Epic": {
+                Epic epic = new Epic(tempLine[3], tempLine[5]);
+                epic.setStatus(takeStatus(tempLine[4]));
+                epic.setID(Integer.parseInt(tempLine[1]));
+                obj = epic;
 
-        return task;
+                break;
+            }
+        }
+        return (T) obj;
+    }
+
+    private Status takeStatus(String str) {
+        if (str.equals(Status.NEW.toString())) {
+            return Status.NEW;
+        } else if (str.equals(Status.IN_PROGRESS.toString())) {
+            return Status.IN_PROGRESS;
+        } else {
+            return Status.DONE;
+        }
     }
 
     private void loadFromFile() {
         try (FileReader reader = new FileReader(file, StandardCharsets.UTF_8)) {
             BufferedReader br = new BufferedReader(reader);
-
+            br.readLine(); //считываем первую строку
             while (br.ready()) {
                 String line = br.readLine();
-                switch (initTypeTask(fromString(line))) {
-                    case "Task": {
-                        listTask.put(fromString(line).getId(),fromString(line));
-                        break;
-                    }
-                    case "Subtask": {
-                        listSubtask.put(fromString(line).getId(),(Subtask) fromString(line));
-                        break;
-                    }
-                    case "Epic": {
-                        listEpic.put(fromString(line).getId(),(Epic) fromString(line));
-                        break;
-                    }
+                Object obj = createObj(line);
+                if (obj instanceof Task) {
+                    listTask.put(createObj(line).getId(), createObj(line));
+                } else if (obj instanceof Subtask) {
+                    listSubtask.put(createObj(line).getId(), createObj(line));
+                } else {
+                    listEpic.put(createObj(line).getId(), createObj(line));
                 }
             }
             br.close();
@@ -107,7 +119,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     @Override
     public void createNewTask(Task task) {
         super.createNewTask(task);
-        tempTask = new ArrayList<>(super.getListTask());
+        tempTask = super.getListTask();
         save();
     }
 

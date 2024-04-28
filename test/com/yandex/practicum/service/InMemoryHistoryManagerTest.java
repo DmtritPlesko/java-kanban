@@ -57,6 +57,4 @@ class InMemoryHistoryManagerTest {
 
         assertEquals(2, manager.getHistory().size());
     }
-
-
 }

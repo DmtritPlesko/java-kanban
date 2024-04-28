@@ -28,6 +28,7 @@ public class Epic extends Task {
             System.out.println("Невозмодно удалить задачу");
         }
     }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

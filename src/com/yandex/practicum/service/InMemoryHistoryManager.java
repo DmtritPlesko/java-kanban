@@ -29,7 +29,6 @@ public class InMemoryHistoryManager implements HistoryManager {
         }
     }
 
-
     private void removeNode(Node node) {
 
         final Node next = node.getNext();
@@ -65,7 +64,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         }
 
 
-        history.put(task.getId(),addLink(task));
+        history.put(task.getId(), addLink(task));
 
     }
 

@@ -33,7 +33,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void createNewTask(Task task)  {
+    public void createNewTask(Task task) {
         id++;
         task.setID(id);
         task.setStatus(Status.NEW);
@@ -53,7 +53,7 @@ public class InMemoryTaskManager implements TaskManager {
 
 
     @Override
-    public void createNewSubtask(Subtask subtask){
+    public void createNewSubtask(Subtask subtask) {
         id++;//добавил
         subtask.setStatus(Status.NEW);
         subtask.setID(id);
