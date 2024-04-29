@@ -1,44 +1,43 @@
 package com.yandex.practicum.service;
 
 import com.yandex.practicum.enums.Status;
+import com.yandex.practicum.mistakes.ManagerSaveException;
 import com.yandex.practicum.models.*;
-
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
     private static File file;
-    private Map<Integer, Task> listTask;
-    private Map<Integer, Subtask> listSubtask;
-    private Map<Integer, Epic> listEpic;
-    private List<Task> tempTask;
-    private static int count = 1;
 
     public FileBackedTaskManager(String fileName) throws FileNotFoundException {
         file = new File(fileName);
-        listTask = new HashMap<>();
-        listSubtask = new HashMap<>();
-        listEpic = new HashMap<>();
         loadFromFile();
     }
 
     private void save() {
         try (FileWriter writer = new FileWriter(file, StandardCharsets.UTF_8)) {
 
-            for (Task task : tempTask) {
+            for (Task task : super.getListTask()) {
                 writer.write(toString(task));
             }
+            for (Subtask sub : super.getListSubtask()) {
+                writer.write(toString(sub));
+            }
+            for (Epic epic : super.getListEpic()) {
+                writer.write(toString(epic));
+            }
         } catch (IOException error) {
-            System.out.println("Ошибка при записи в файл");
+            throw new ManagerSaveException("Ошибка при записи в файл");
         }
     }
 
     public String toString(Task task) {
 
-        String temp = count + "," + task.getId().toString() + "," + initTypeTask(task) + "," + task.getName()
+        String temp = task.getId().toString() + "," + initTypeTask(task) + "," + task.getName()
                 + "," + task.getStatus() + "," + task.getDescription();
-        count++;
+        if (initTypeTask(task).equals("Subtask")) {
+            temp += "," + super.getSubtaskById(task.getId()).getIdEpic();
+        }
         return temp;
     }
 
@@ -101,39 +100,77 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 String line = br.readLine();
                 Object obj = createObj(line);
                 if (obj instanceof Task) {
-                    listTask.put(createObj(line).getId(), createObj(line));
+                    super.addInTaskList(createObj(line).getId(), createObj(line));
                 } else if (obj instanceof Subtask) {
-                    listSubtask.put(createObj(line).getId(), createObj(line));
+                    super.addInSubtaskList(createObj(line).getId(), createObj(line));
                 } else {
-                    listEpic.put(createObj(line).getId(), createObj(line));
+                    super.addInEpicList(createObj(line).getId(), createObj(line));
                 }
             }
             br.close();
         } catch (IOException error) {
-            System.out.println("Ошибка при чтении файл ");
-            return;
+            throw new ManagerSaveException("Ошибка при чтении файла");
         }
-
     }
 
     @Override
     public void createNewTask(Task task) {
         super.createNewTask(task);
-        tempTask = super.getListTask();
         save();
     }
 
     @Override
     public void createNewSubtask(Subtask subtask) {
         super.createNewSubtask(subtask);
-        tempTask = new ArrayList<>(super.getListSubtask());
         save();
     }
 
     @Override
     public void createNewEpic(Epic epic) {
         super.createNewEpic(epic);
-        tempTask = new ArrayList<>(super.getListEpic());
         save();
     }
+
+    @Override
+    public void updateTask(Task task) {
+        super.updateTask(task);
+        save();
+    }
+
+    @Override
+    public void updateSubtask(Subtask subtask) {
+        super.updateSubtask(subtask);
+        save();
+    }
+
+    @Override
+    public void updateEpic(Epic epic) {
+        super.updateEpic(epic);
+        save();
+    }
+
+    @Override
+    public void deleteTaskForID(Integer id) {
+        super.deleteTaskForID(id);
+        save();
+    }
+
+    @Override
+    public void deleteSubtaskForID(Integer id) {
+        super.deleteSubtaskForID(id);
+        save();
+    }
+
+    @Override
+    public void deleteEpicForID(Integer id) {
+        super.deleteEpicForID(id);
+        save();
+    }
+
+    @Override
+    public void deleteAllTask() {
+        super.deleteAllTask();
+        save();
+    }
+
 }

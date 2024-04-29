@@ -6,6 +6,7 @@ import com.yandex.practicum.models.Task;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
@@ -35,5 +36,14 @@ class FileBackedTaskManagerTest {
         manager.createNewSubtask(subtask);
 
         assertNotNull(manager.getHistory());
+    }
+
+    @Test
+    public void checkReadFile() {
+        String fileName = "output.csv";
+
+        File file = new File(fileName);
+
+        assertTrue(file.canRead(), "Файл не читается");
     }
 }

@@ -3,22 +3,20 @@ package com.yandex.practicum.intrerfaces;
 import com.yandex.practicum.models.Epic;
 import com.yandex.practicum.models.Subtask;
 import com.yandex.practicum.models.Task;
-
-import java.io.IOException;
 import java.util.List;
 
 public interface TaskManager {
     void print();
 
-    void createNewTask(Task task) throws IOException;
+    void createNewTask(Task task);
 
     void updateTask(Task task);
 
-    void createNewSubtask(Subtask subtask) throws IOException;
+    void createNewSubtask(Subtask subtask);
 
     void updateSubtask(Subtask subtask);
 
-    void createNewEpic(Epic epic) throws IOException;
+    void createNewEpic(Epic epic);
 
     void updateEpic(Epic epic);
 

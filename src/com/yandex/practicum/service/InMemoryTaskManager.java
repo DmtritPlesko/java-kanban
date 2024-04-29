@@ -2,10 +2,8 @@ package com.yandex.practicum.service;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import java.util.Map;
 import java.util.HashMap;
-
 import com.yandex.practicum.enums.Status;
 import com.yandex.practicum.models.*;
 import com.yandex.practicum.intrerfaces.HistoryManager;
@@ -23,6 +21,18 @@ public class InMemoryTaskManager implements TaskManager {
         this.listSubtask = new HashMap<>();
         this.listEpic = new HashMap<>();
         historyManager = Managers.getDefaultHistory();
+    }
+
+    void addInTaskList(Integer key, Task task) {
+        listTask.put(key, task);
+    }
+
+    void addInSubtaskList(Integer key, Subtask subtask) {
+        listSubtask.put(key, subtask);
+    }
+
+    void addInEpicList(Integer key, Epic epic) {
+        listEpic.put(key, epic);
     }
 
     @Override

@@ -3,7 +3,6 @@ package com.yandex.practicum.service;
 import com.yandex.practicum.models.Task;
 import com.yandex.practicum.models.Node;
 import com.yandex.practicum.intrerfaces.HistoryManager;
-
 import java.util.*;
 
 public class InMemoryHistoryManager implements HistoryManager {
