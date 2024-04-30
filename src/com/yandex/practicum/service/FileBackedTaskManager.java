@@ -3,14 +3,15 @@ package com.yandex.practicum.service;
 import com.yandex.practicum.enums.Status;
 import com.yandex.practicum.mistakes.ManagerSaveException;
 import com.yandex.practicum.models.*;
+
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
     private static File file;
 
-    public FileBackedTaskManager(String fileName) throws FileNotFoundException {
-        file = new File(fileName);
+    public FileBackedTaskManager(File fileName) throws FileNotFoundException {
+        file = fileName;
         loadFromFile();
     }
 
@@ -38,42 +39,43 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         if (initTypeTask(task).equals("Subtask")) {
             temp += "," + super.getSubtaskById(task.getId()).getIdEpic();
         }
+        temp += '\n';
         return temp;
     }
 
     private String initTypeTask(Task task) {
         Object obj = task;
-        if (task.getClass().toString().equals("Task")) {
-            return "Task";
-        } else if (task.getClass().toString().equals("Subtask")) {
+        if (task instanceof Subtask) {
             return "Subtask";
-        } else {
+        } else if (task instanceof Epic) {
             return "Epic";
+        } else {
+            return "Task";
         }
     }
 
     private <T extends Task> T createObj(String value) {
         Object obj = null;
         String[] tempLine = value.split(",");
-        switch (tempLine[3]) {
+        switch (tempLine[1]) {
             case "Task": {
-                Task task = new Task(tempLine[3], tempLine[5]);
-                task.setStatus(takeStatus(tempLine[4]));
-                task.setID(Integer.parseInt(tempLine[1]));
+                Task task = new Task(tempLine[2], tempLine[4]);
+                task.setStatus(takeStatus(tempLine[3]));
+                task.setID(Integer.parseInt(tempLine[0]));
                 obj = task;
                 break;
             }
             case "Subtask": {
-                Subtask sub = new Subtask(tempLine[3], tempLine[5]);
-                sub.setStatus(takeStatus(tempLine[4]));
-                sub.setID(Integer.parseInt(tempLine[1]));
+                Subtask sub = new Subtask(tempLine[2], tempLine[4]);
+                sub.setStatus(takeStatus(tempLine[3]));
+                sub.setID(Integer.parseInt(tempLine[0]));
                 obj = sub;
                 break;
             }
             case "Epic": {
-                Epic epic = new Epic(tempLine[3], tempLine[5]);
-                epic.setStatus(takeStatus(tempLine[4]));
-                epic.setID(Integer.parseInt(tempLine[1]));
+                Epic epic = new Epic(tempLine[2], tempLine[4]);
+                epic.setStatus(takeStatus(tempLine[3]));
+                epic.setID(Integer.parseInt(tempLine[0]));
                 obj = epic;
 
                 break;
@@ -95,16 +97,15 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     private void loadFromFile() {
         try (FileReader reader = new FileReader(file, StandardCharsets.UTF_8)) {
             BufferedReader br = new BufferedReader(reader);
-            br.readLine(); //считываем первую строку
             while (br.ready()) {
                 String line = br.readLine();
                 Object obj = createObj(line);
-                if (obj instanceof Task) {
-                    super.addInTaskList(createObj(line).getId(), createObj(line));
-                } else if (obj instanceof Subtask) {
-                    super.addInSubtaskList(createObj(line).getId(), createObj(line));
+                if (obj instanceof Subtask) {
+                    super.listSubtask.put(createObj(line).getId(), createObj(line));
+                } else if (obj instanceof Epic) {
+                    super.listEpic.put(createObj(line).getId(), createObj(line));
                 } else {
-                    super.addInEpicList(createObj(line).getId(), createObj(line));
+                    super.listTask.put(createObj(line).getId(), createObj(line));
                 }
             }
             br.close();

@@ -11,9 +11,9 @@ import com.yandex.practicum.intrerfaces.TaskManager;
 
 public class InMemoryTaskManager implements TaskManager {
     protected int id = 0;
-    private Map<Integer, Task> listTask;
-    private Map<Integer, Subtask> listSubtask;
-    private Map<Integer, Epic> listEpic;
+    protected Map<Integer, Task> listTask;
+    protected Map<Integer, Subtask> listSubtask;
+    protected Map<Integer, Epic> listEpic;
     private HistoryManager historyManager;
 
     public InMemoryTaskManager() {
@@ -21,18 +21,6 @@ public class InMemoryTaskManager implements TaskManager {
         this.listSubtask = new HashMap<>();
         this.listEpic = new HashMap<>();
         historyManager = Managers.getDefaultHistory();
-    }
-
-    void addInTaskList(Integer key, Task task) {
-        listTask.put(key, task);
-    }
-
-    void addInSubtaskList(Integer key, Subtask subtask) {
-        listSubtask.put(key, subtask);
-    }
-
-    void addInEpicList(Integer key, Epic epic) {
-        listEpic.put(key, epic);
     }
 
     @Override

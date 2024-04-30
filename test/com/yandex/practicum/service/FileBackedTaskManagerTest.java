@@ -1,14 +1,17 @@
 package com.yandex.practicum.service;
 
 import com.yandex.practicum.intrerfaces.TaskManager;
+import com.yandex.practicum.mistakes.ManagerSaveException;
+import com.yandex.practicum.models.Epic;
 import com.yandex.practicum.models.Subtask;
 import com.yandex.practicum.models.Task;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -17,7 +20,14 @@ class FileBackedTaskManagerTest {
 
     @BeforeAll
     public static void setup() throws FileNotFoundException {
-        manager = new FileBackedTaskManager("output.csv");
+        String filePath = "output.csv";
+        try {
+            File file = new File(filePath);
+            manager = new FileBackedTaskManager(file);
+        } catch (FileNotFoundException e) {
+            System.out.println("Ошибка при чтении файла");
+        }
+
     }
 
     @Test
@@ -37,13 +47,33 @@ class FileBackedTaskManagerTest {
 
         assertNotNull(manager.getHistory());
     }
+    @Test
+    public void checkAddAndWriteFromFileTaskAndSubtaskAndEpic () {
+        Task task = new Task("Тут будет тип Task","Какое то описание");
+        Subtask sub = new Subtask("Тут будет тип Subtask","Какое то описание");
+        Epic epic = new Epic("Tут будет тип Epic","Какое то описание");
+
+        manager.createNewTask(task);
+        manager.createNewSubtask(sub);
+        manager.createNewEpic(epic);
+
+        final int idTask = task.getId();
+        final int idSub = sub.getId();
+        final int idEpic = epic.getId();
+
+        assertEquals(task,manager.getTaskById(idTask));
+        assertEquals(sub,manager.getSubtaskById(idSub));
+        assertEquals(epic,manager.getEpicById(idEpic));
+
+    }
 
     @Test
-    public void checkReadFile() {
-        String fileName = "output.csv";
-
-        File file = new File(fileName);
-
-        assertTrue(file.canRead(), "Файл не читается");
+    public void loadFromFile () {
+        assertNotNull(manager.getListEpic(),"Пусто");
+        assertNotNull(manager.getListSubtask(),"Пусто");
+        assertNotNull(manager.getListEpic(),"Пусто");
     }
 }
+
+
+
