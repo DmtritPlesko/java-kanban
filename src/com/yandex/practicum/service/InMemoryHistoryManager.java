@@ -1,8 +1,8 @@
-package service;
+package com.yandex.practicum.service;
 
 import com.yandex.practicum.models.Task;
 import com.yandex.practicum.models.Node;
-
+import com.yandex.practicum.intrerfaces.HistoryManager;
 import java.util.*;
 
 public class InMemoryHistoryManager implements HistoryManager {
@@ -27,7 +27,6 @@ public class InMemoryHistoryManager implements HistoryManager {
             return node;
         }
     }
-
 
     private void removeNode(Node node) {
 
@@ -64,7 +63,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         }
 
 
-        history.put(task.getId(),addLink(task));
+        history.put(task.getId(), addLink(task));
 
     }
 

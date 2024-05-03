@@ -1,9 +1,8 @@
-package service;
+package com.yandex.practicum.intrerfaces;
 
 import com.yandex.practicum.models.Epic;
 import com.yandex.practicum.models.Subtask;
 import com.yandex.practicum.models.Task;
-
 import java.util.List;
 
 public interface TaskManager {
