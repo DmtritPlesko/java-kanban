@@ -1,9 +1,8 @@
 package com.yandex.practicum.service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
+import java.time.LocalDateTime;
+import java.util.*;
+
 import com.yandex.practicum.enums.Status;
 import com.yandex.practicum.models.*;
 import com.yandex.practicum.intrerfaces.HistoryManager;
@@ -21,6 +20,50 @@ public class InMemoryTaskManager implements TaskManager {
         this.listSubtask = new HashMap<>();
         this.listEpic = new HashMap<>();
         historyManager = Managers.getDefaultHistory();
+    }
+    private void changeStatusByEpic(Epic epic) {
+        if (epic.getSubtaskByEpic().isEmpty()) {
+            epic.setStatus(Status.NEW);
+        } else {
+            int countIsNew = 0;
+            int countIsProcess = 0;
+            List<Integer> temp = epic.getSubtaskByEpic();
+            for (Integer i : temp) {
+                if (listSubtask.get(i).getStatus().equals(Status.NEW)) {
+                    countIsNew++;
+                } else if (listSubtask.get(i).getStatus().equals(Status.DONE)) {
+                    countIsProcess++;
+                }
+                if (countIsProcess == temp.size()) {
+                    epic.setStatus(Status.DONE);
+                } else if (countIsNew == temp.size()) {
+                    epic.setStatus(Status.NEW);
+                }
+            }
+        }
+        epic.setStatus(Status.IN_PROGRESS);
+    }
+
+    public LocalDateTime getEndTime(Task task) {
+        if(task instanceof Epic){
+            LocalDateTime time = listSubtask.get(((Epic) task).getIdSubtasks().get(0)).getStartTime();
+            ((Epic) task).getIdSubtasks().stream()
+                    .map (i -> listSubtask.get(i).getDuration())
+                    .filter(Objects::nonNull)
+                    .peek(i -> time.plus(i));
+
+            return time;
+        }
+        return task.getStartTime().plus(task.getDuration());
+    }
+
+    public TreeSet<Task> getPrioritizedTasks () {
+        Comparator<Task> comparator = Comparator.comparing(Task::getStartTime);
+        TreeSet<Task> sorted = new TreeSet<>(comparator);
+
+        return sorted;
+
+
     }
 
     @Override
@@ -87,29 +130,6 @@ public class InMemoryTaskManager implements TaskManager {
         } else {
             System.out.println("невозможно обновить задачу в эпике");
         }
-    }
-
-    private void changeStatusByEpic(Epic epic) {
-        if (epic.getSubtaskByEpic().isEmpty()) {
-            epic.setStatus(Status.NEW);
-        } else {
-            int countIsNew = 0;
-            int countIsProcess = 0;
-            List<Integer> temp = epic.getSubtaskByEpic();
-            for (Integer i : temp) {
-                if (listSubtask.get(i).getStatus().equals(Status.NEW)) {
-                    countIsNew++;
-                } else if (listSubtask.get(i).getStatus().equals(Status.DONE)) {
-                    countIsProcess++;
-                }
-                if (countIsProcess == temp.size()) {
-                    epic.setStatus(Status.DONE);
-                } else if (countIsNew == temp.size()) {
-                    epic.setStatus(Status.NEW);
-                }
-            }
-        }
-        epic.setStatus(Status.IN_PROGRESS);
     }
 
     @Override

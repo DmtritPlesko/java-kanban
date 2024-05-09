@@ -3,13 +3,16 @@ package com.yandex.practicum.models;
 import com.yandex.practicum.enums.Status;
 
 import java.util.Objects;
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 public class Task {
-
     protected String name;
     protected String description;
     protected int idTask;
     protected Status status;
+    protected Duration duration;
+    protected LocalDateTime startTime;
 
     public Task(String newName, String newDescription) {
         this.name = newName;
@@ -39,6 +42,15 @@ public class Task {
     public void setID(Integer id) {
         this.idTask = id;
     }
+
+    public Duration getDuration() {return duration;}
+
+    public void setDuration(Duration duration) {this.duration = Duration.ofMinutes(duration.toMinutes());}
+
+    public LocalDateTime getStartTime() {return startTime;}
+
+    public void setStartTime(LocalDateTime startTime) {this.startTime = startTime;}
+
 
     @Override
     public boolean equals(Object o) {
