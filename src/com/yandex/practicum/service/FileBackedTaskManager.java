@@ -19,7 +19,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements Serial
 
     public FileBackedTaskManager(File fileName) throws FileNotFoundException {
         file = fileName;
-        loadFromFile();
+       loadFromFile();
     }
 
     private void save() {
@@ -46,7 +46,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements Serial
         if (initTypeTask(task).equals("Subtask")) {
             temp += "," + super.getSubtaskById(task.getId()).getIdEpic();
         }
-        temp += ","+task.getStartTime().format(formatter)+","+super.getEndTime(task).format(formatter);
+        if(checkStartTime(task)) {
+            temp += ","+task.getStartTime().format(formatter)+","+super.getEndTime(task).format(formatter);
+        }
         temp += '\n';
         return temp;
     }
@@ -61,7 +63,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements Serial
             return "Task";
         }
     }
-
     private <T extends Task> T createObj(String value) {
         Object obj = null;
         String[] tempLine = value.split(",");
@@ -70,8 +71,14 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements Serial
                 Task task = new Task(tempLine[2], tempLine[4]);
                 task.setStatus(takeStatus(tempLine[3]));
                 task.setID(Integer.parseInt(tempLine[0]));
-                String[] dataAndTime = tempLine[5].split(" ");//время начала
-
+                if((tempLine.length-1)>4) {
+                    task.setStartTime(LocalDateTime.parse(tempLine[5],formatter));
+                    task.setDuration(Duration
+                            .ofMinutes(
+                                    LocalDateTime.parse(tempLine[6],formatter).getMinute()
+                                            - task.getStartTime().getMinute()
+                            ));
+                }
                 obj = task;
                 break;
             }
@@ -80,6 +87,14 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements Serial
                 sub.setStatus(takeStatus(tempLine[3]));
                 sub.setID(Integer.parseInt(tempLine[0]));
                 sub.setIdEpic(Integer.parseInt(tempLine[5]));
+                if((tempLine.length-1)>5) {
+                    sub.setStartTime(LocalDateTime.parse(tempLine[6],formatter));
+                    sub.setDuration(Duration
+                            .ofMinutes(
+                                    LocalDateTime.parse(tempLine[7],formatter).getMinute()
+                                            - sub.getStartTime().getMinute()
+                            ));
+                }
                 obj = sub;
                 break;
             }
@@ -184,5 +199,4 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements Serial
         super.deleteAllTask();
         save();
     }
-
 }

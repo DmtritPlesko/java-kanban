@@ -12,6 +12,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -33,6 +37,12 @@ class FileBackedTaskManagerTest {
     @Test
     public void createAndSaveTaskFromFile() throws IOException {
         Task task = new Task("qwfq", "qwfqwf");
+        LocalDate data = LocalDate.of(2004,5,21);
+        LocalTime time = LocalTime.now();
+        LocalDateTime dataTime = LocalDateTime.of(data,time);
+        Duration duration = Duration.ofMinutes(12_545_655);
+        task.setStartTime(dataTime);
+        task.setDuration(duration);
 
         manager.createNewTask(task);
 

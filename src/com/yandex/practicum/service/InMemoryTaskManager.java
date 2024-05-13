@@ -14,12 +14,15 @@ public class InMemoryTaskManager implements TaskManager {
     protected Map<Integer, Subtask> listSubtask;
     protected Map<Integer, Epic> listEpic;
     private HistoryManager historyManager;
+    private TreeSet<Task> priority;
+    static Comparator<Task> comparator = Comparator.comparing(Task::getStartTime);
 
     public InMemoryTaskManager() {
         this.listTask = new HashMap<>();
         this.listSubtask = new HashMap<>();
         this.listEpic = new HashMap<>();
         historyManager = Managers.getDefaultHistory();
+        priority = new TreeSet<>(comparator);
     }
     private void changeStatusByEpic(Epic epic) {
         if (epic.getSubtaskByEpic().isEmpty()) {
@@ -54,18 +57,35 @@ public class InMemoryTaskManager implements TaskManager {
 
             return time;
         }
-        return task.getStartTime().plus(task.getDuration());
+        if(checkStartTime(task)) {
+            return task.getStartTime().plus(task.getDuration());
+
+        }
+        throw new RuntimeException("Ошибка вов ременном интервале");
+
     }
 
     public TreeSet<Task> getPrioritizedTasks () {
-        Comparator<Task> comparator = Comparator.comparing(Task::getStartTime);
-        TreeSet<Task> sorted = new TreeSet<>(comparator);
-
-        return sorted;
-
-
+        return priority;
     }
 
+    protected boolean checkStartTime (Task task) {
+        return task.getStartTime() != null;
+    }
+
+    private boolean timeOverlap (Task task,Task task2) {
+        return !getEndTime(task).isBefore(task2.getStartTime())
+                && !getEndTime(task2).isBefore(task.getStartTime());
+    }
+
+    public boolean checkTime (Task task) {
+        Optional<Task> first = priority.stream()
+                .peek(task1 -> timeOverlap(task1, task)).findFirst();
+        if(first.isPresent()) {
+            return true;
+        }
+        return false;
+    }
     @Override
     public void print() {
         System.out.println(listTask);
@@ -79,6 +99,9 @@ public class InMemoryTaskManager implements TaskManager {
         task.setID(id);
         task.setStatus(Status.NEW);
         listTask.put(id, task);
+        if(checkStartTime(task) && checkTime(task)) {
+            priority.add(task);
+        }
         System.out.println("Задача доавлена");
     }
 
@@ -92,15 +115,15 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
-
     @Override
     public void createNewSubtask(Subtask subtask) {
-        id++;//добавил
+        id++;
         subtask.setStatus(Status.NEW);
         subtask.setID(id);
         listSubtask.put(id, subtask);
-
-
+        if(checkStartTime(subtask) && checkTime(subtask)) {
+            priority.add(subtask);
+        }
     }
 
     @Override
