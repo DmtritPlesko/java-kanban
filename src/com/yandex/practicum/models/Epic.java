@@ -1,8 +1,5 @@
 package com.yandex.practicum.models;
 
-import com.yandex.practicum.intrerfaces.TaskManager;
-
-import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.List;
 import java.util.ArrayList;
@@ -32,7 +29,9 @@ public class Epic extends Task {
         }
     }
 
-    public List<Integer> getIdSubtasks () {return idSubtasks;}
+    public List<Integer> getIdSubtasks() {
+        return idSubtasks;
+    }
 
     @Override
     public boolean equals(Object o) {

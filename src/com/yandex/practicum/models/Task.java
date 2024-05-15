@@ -43,13 +43,21 @@ public class Task {
         this.idTask = id;
     }
 
-    public Duration getDuration() {return duration;}
+    public Duration getDuration() {
+        return duration;
+    }
 
-    public void setDuration(Duration duration) {this.duration = Duration.ofMinutes(duration.toMinutes());}
+    public void setDuration(Duration duration) {
+        this.duration = Duration.ofMinutes(duration.toMinutes());
+    }
 
-    public LocalDateTime getStartTime() {return startTime;}
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
 
-    public void setStartTime(LocalDateTime startTime) {this.startTime = startTime;}
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
 
 
     @Override

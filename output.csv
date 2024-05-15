@@ -1,3 +1,4 @@
 1,Task,Тут будет тип Task,NEW,Какое то описание
+1,Subtask,а туту ужэе будет саб,NEW,qwfqwfqwf,0
 2,Subtask,Тут будет тип Subtask,NEW,Какое то описание,0
-3,Epic,Tут будет тип Epic,null,Какое то описание
+3,Epic,Tут будет тип Epic,DONE,Какое то описание

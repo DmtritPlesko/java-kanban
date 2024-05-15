@@ -1,23 +1,21 @@
 package com.yandex.practicum.service;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import com.yandex.practicum.models.Epic;
 import com.yandex.practicum.models.Subtask;
 import com.yandex.practicum.models.Task;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-class InMemoryTaskManagerTest {
+import static org.junit.jupiter.api.Assertions.*;
 
-    public static InMemoryTaskManager manager;
-    public int ID;
 
-    @BeforeAll
-    public static void setup() {
-        manager = new InMemoryTaskManager();
+class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
+
+    @BeforeEach
+    public void setup() {
+        manager = (InMemoryTaskManager) Managers.getDefault();
     }
 
     @Test
@@ -276,5 +274,4 @@ class InMemoryTaskManagerTest {
 
         assertEquals(false, manager.getHistory().equals(taska));
     }
-
 }

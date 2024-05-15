@@ -24,6 +24,7 @@ public class InMemoryTaskManager implements TaskManager {
         historyManager = Managers.getDefaultHistory();
         priority = new TreeSet<>(comparator);
     }
+
     private void changeStatusByEpic(Epic epic) {
         if (epic.getSubtaskByEpic().isEmpty()) {
             epic.setStatus(Status.NEW);
@@ -48,16 +49,16 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     public LocalDateTime getEndTime(Task task) {
-        if(task instanceof Epic){
+        if (task instanceof Epic) {
             LocalDateTime time = listSubtask.get(((Epic) task).getIdSubtasks().get(0)).getStartTime();
             ((Epic) task).getIdSubtasks().stream()
-                    .map (i -> listSubtask.get(i).getDuration())
+                    .map(i -> listSubtask.get(i).getDuration())
                     .filter(Objects::nonNull)
                     .peek(i -> time.plus(i));
 
             return time;
         }
-        if(checkStartTime(task)) {
+        if (checkStartTime(task)) {
             return task.getStartTime().plus(task.getDuration());
 
         }
@@ -65,27 +66,28 @@ public class InMemoryTaskManager implements TaskManager {
 
     }
 
-    public TreeSet<Task> getPrioritizedTasks () {
+    public TreeSet<Task> getPrioritizedTasks() {
         return priority;
     }
 
-    protected boolean checkStartTime (Task task) {
+    protected boolean checkStartTime(Task task) {
         return task.getStartTime() != null;
     }
 
-    private boolean timeOverlap (Task task,Task task2) {
+    private boolean timeOverlap(Task task, Task task2) {
         return !getEndTime(task).isBefore(task2.getStartTime())
                 && !getEndTime(task2).isBefore(task.getStartTime());
     }
 
-    public boolean checkTime (Task task) {
+    public boolean checkTime(Task task) {
         Optional<Task> first = priority.stream()
                 .peek(task1 -> timeOverlap(task1, task)).findFirst();
-        if(first.isPresent()) {
+        if (first.isPresent()) {
             return true;
         }
         return false;
     }
+
     @Override
     public void print() {
         System.out.println(listTask);
@@ -99,7 +101,7 @@ public class InMemoryTaskManager implements TaskManager {
         task.setID(id);
         task.setStatus(Status.NEW);
         listTask.put(id, task);
-        if(checkStartTime(task) && checkTime(task)) {
+        if (checkStartTime(task) && checkTime(task)) {
             priority.add(task);
         }
         System.out.println("Задача доавлена");
@@ -121,7 +123,7 @@ public class InMemoryTaskManager implements TaskManager {
         subtask.setStatus(Status.NEW);
         subtask.setID(id);
         listSubtask.put(id, subtask);
-        if(checkStartTime(subtask) && checkTime(subtask)) {
+        if (checkStartTime(subtask) && checkTime(subtask)) {
             priority.add(subtask);
         }
     }
@@ -264,4 +266,3 @@ public class InMemoryTaskManager implements TaskManager {
         return historyManager.getHistory();
     }
 }
-
