@@ -4,11 +4,16 @@ import com.yandex.practicum.enums.Status;
 import com.yandex.practicum.mistakes.ManagerSaveException;
 import com.yandex.practicum.models.*;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.io.Serializable;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 
-public class FileBackedTaskManager extends InMemoryTaskManager {
+public class FileBackedTaskManager extends InMemoryTaskManager implements Serializable {
     private static File file;
+    static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
 
     public FileBackedTaskManager(File fileName) throws FileNotFoundException {
         file = fileName;
@@ -39,6 +44,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         if (initTypeTask(task).equals("Subtask")) {
             temp += "," + super.getSubtaskById(task.getId()).getIdEpic();
         }
+        if (checkStartTime(task)) {
+            temp += "," + task.getStartTime().format(formatter) + "," + super.getEndTime(task).format(formatter);
+        }
         temp += '\n';
         return temp;
     }
@@ -62,6 +70,14 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 Task task = new Task(tempLine[2], tempLine[4]);
                 task.setStatus(takeStatus(tempLine[3]));
                 task.setID(Integer.parseInt(tempLine[0]));
+                if ((tempLine.length - 1) > 4) {
+                    task.setStartTime(LocalDateTime.parse(tempLine[5], formatter));
+                    task.setDuration(Duration
+                            .ofMinutes(
+                                    LocalDateTime.parse(tempLine[6], formatter).getMinute()
+                                            - task.getStartTime().getMinute()
+                            ));
+                }
                 obj = task;
                 break;
             }
@@ -69,6 +85,15 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 Subtask sub = new Subtask(tempLine[2], tempLine[4]);
                 sub.setStatus(takeStatus(tempLine[3]));
                 sub.setID(Integer.parseInt(tempLine[0]));
+                sub.setIdEpic(Integer.parseInt(tempLine[5]));
+                if ((tempLine.length - 1) > 5) {
+                    sub.setStartTime(LocalDateTime.parse(tempLine[6], formatter));
+                    sub.setDuration(Duration
+                            .ofMinutes(
+                                    LocalDateTime.parse(tempLine[7], formatter).getMinute()
+                                            - sub.getStartTime().getMinute()
+                            ));
+                }
                 obj = sub;
                 break;
             }
@@ -173,5 +198,4 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         super.deleteAllTask();
         save();
     }
-
 }

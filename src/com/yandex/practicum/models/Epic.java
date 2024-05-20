@@ -29,6 +29,10 @@ public class Epic extends Task {
         }
     }
 
+    public List<Integer> getIdSubtasks() {
+        return idSubtasks;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -37,4 +41,5 @@ public class Epic extends Task {
         Epic epic = (Epic) o;
         return Objects.equals(idTask, epic.idTask);
     }
+
 }

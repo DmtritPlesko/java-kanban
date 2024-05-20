@@ -1,9 +1,8 @@
 package com.yandex.practicum.service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
+import java.time.LocalDateTime;
+import java.util.*;
+
 import com.yandex.practicum.enums.Status;
 import com.yandex.practicum.models.*;
 import com.yandex.practicum.intrerfaces.HistoryManager;
@@ -15,12 +14,78 @@ public class InMemoryTaskManager implements TaskManager {
     protected Map<Integer, Subtask> listSubtask;
     protected Map<Integer, Epic> listEpic;
     private HistoryManager historyManager;
+    private TreeSet<Task> priority;
+    static Comparator<Task> comparator = Comparator.comparing(Task::getStartTime);
 
     public InMemoryTaskManager() {
         this.listTask = new HashMap<>();
         this.listSubtask = new HashMap<>();
         this.listEpic = new HashMap<>();
         historyManager = Managers.getDefaultHistory();
+        priority = new TreeSet<>(comparator);
+    }
+
+    private void changeStatusByEpic(Epic epic) {
+        if (epic.getSubtaskByEpic().isEmpty()) {
+            epic.setStatus(Status.NEW);
+        } else {
+            int countIsNew = 0;
+            int countIsProcess = 0;
+            List<Integer> temp = epic.getSubtaskByEpic();
+            for (Integer i : temp) {
+                if (listSubtask.get(i).getStatus().equals(Status.NEW)) {
+                    countIsNew++;
+                } else if (listSubtask.get(i).getStatus().equals(Status.DONE)) {
+                    countIsProcess++;
+                }
+                if (countIsProcess == temp.size()) {
+                    epic.setStatus(Status.DONE);
+                } else if (countIsNew == temp.size()) {
+                    epic.setStatus(Status.NEW);
+                }
+            }
+        }
+        epic.setStatus(Status.IN_PROGRESS);
+    }
+
+    public LocalDateTime getEndTime(Task task) {
+        if (task instanceof Epic) {
+            LocalDateTime time = listSubtask.get(((Epic) task).getIdSubtasks().get(0)).getStartTime();
+            ((Epic) task).getIdSubtasks().stream()
+                    .map(i -> listSubtask.get(i).getDuration())
+                    .filter(Objects::nonNull)
+                    .peek(i -> time.plus(i));
+
+            return time;
+        }
+        if (checkStartTime(task)) {
+            return task.getStartTime().plus(task.getDuration());
+
+        }
+        throw new RuntimeException("Ошибка вов ременном интервале");
+
+    }
+
+    public TreeSet<Task> getPrioritizedTasks() {
+        return priority;
+    }
+
+    protected boolean checkStartTime(Task task) {
+        return task.getStartTime() != null;
+    }
+
+    private boolean timeOverlap(Task task, Task task2) {
+        return !getEndTime(task).isBefore(task2.getStartTime())
+                && !getEndTime(task2).isBefore(task.getStartTime());
+    }
+
+    public boolean checkTime(Task task) {
+        Optional<Task> first = priority.stream()
+                .peek(task1 -> timeOverlap(task1, task)).findFirst();
+        if (first.isPresent()) {
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -36,6 +101,9 @@ public class InMemoryTaskManager implements TaskManager {
         task.setID(id);
         task.setStatus(Status.NEW);
         listTask.put(id, task);
+        if (checkStartTime(task) && checkTime(task)) {
+            priority.add(task);
+        }
         System.out.println("Задача доавлена");
     }
 
@@ -49,15 +117,15 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
-
     @Override
     public void createNewSubtask(Subtask subtask) {
-        id++;//добавил
+        id++;
         subtask.setStatus(Status.NEW);
         subtask.setID(id);
         listSubtask.put(id, subtask);
-
-
+        if (checkStartTime(subtask) && checkTime(subtask)) {
+            priority.add(subtask);
+        }
     }
 
     @Override
@@ -87,29 +155,6 @@ public class InMemoryTaskManager implements TaskManager {
         } else {
             System.out.println("невозможно обновить задачу в эпике");
         }
-    }
-
-    private void changeStatusByEpic(Epic epic) {
-        if (epic.getSubtaskByEpic().isEmpty()) {
-            epic.setStatus(Status.NEW);
-        } else {
-            int countIsNew = 0;
-            int countIsProcess = 0;
-            List<Integer> temp = epic.getSubtaskByEpic();
-            for (Integer i : temp) {
-                if (listSubtask.get(i).getStatus().equals(Status.NEW)) {
-                    countIsNew++;
-                } else if (listSubtask.get(i).getStatus().equals(Status.DONE)) {
-                    countIsProcess++;
-                }
-                if (countIsProcess == temp.size()) {
-                    epic.setStatus(Status.DONE);
-                } else if (countIsNew == temp.size()) {
-                    epic.setStatus(Status.NEW);
-                }
-            }
-        }
-        epic.setStatus(Status.IN_PROGRESS);
     }
 
     @Override
@@ -221,4 +266,3 @@ public class InMemoryTaskManager implements TaskManager {
         return historyManager.getHistory();
     }
 }
-
