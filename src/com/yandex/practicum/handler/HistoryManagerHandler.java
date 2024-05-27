@@ -14,7 +14,7 @@ public class HistoryManagerHandler extends BaseHttpHandler {
             switch (method) {
                 case "GET": {
                     if (Pattern.matches("^/history$", path)) {
-
+                        System.out.println("qwfqwf");
                     } else {
 
                         sendNotFound(exchange, "Неверный запрос");
@@ -23,11 +23,11 @@ public class HistoryManagerHandler extends BaseHttpHandler {
                     }
                 }
                 default: {
-
+                    sendNotFound(exchange,"Неверный метод");
                 }
             }
         } catch (Exception e) {
-
+            sendText(exchange,e.getMessage());
         }
 
     }
