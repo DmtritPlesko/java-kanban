@@ -8,6 +8,8 @@ import com.yandex.practicum.models.*;
 import com.yandex.practicum.intrerfaces.HistoryManager;
 import com.yandex.practicum.intrerfaces.TaskManager;
 
+import javax.swing.*;
+
 public class InMemoryTaskManager implements TaskManager {
     protected int id = 0;
     protected Map<Integer, Task> listTask;
@@ -66,6 +68,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     }
 
+    @Override
     public TreeSet<Task> getPrioritizedTasks() {
         return priority;
     }
@@ -187,6 +190,7 @@ public class InMemoryTaskManager implements TaskManager {
             historyManager.remove(id);
             System.out.println("подзадача удалена");
         } else {
+
             System.out.println("невозможно удалить задачу");
         }
     }
@@ -264,5 +268,16 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public List<Task> getHistory() {
         return historyManager.getHistory();
+    }
+
+    @Override
+    public List<Subtask> getSubtasksByEpicId(Integer id) {
+        Epic epic = getEpicById(id);
+        List<Subtask> subList = new ArrayList<>();
+
+        for (Integer temp : epic.getSubtaskByEpic()) {
+            subList.add(listSubtask.get(temp));
+        }
+        return subList;
     }
 }
