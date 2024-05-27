@@ -2,16 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7426e51e-e9cd-4d33-975d-f16c0f80ac20" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/com/yandex/practicum/handler/BaseHttpHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/yandex/practicum/handler/BaseHttpHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/yandex/practicum/handler/EpicManagerHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/yandex/practicum/handler/EpicManagerHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/yandex/practicum/handler/HistoryManagerHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/yandex/practicum/handler/HistoryManagerHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/yandex/practicum/handler/PrioritizedHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/yandex/practicum/handler/PrioritizedHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/yandex/practicum/handler/SubtaskManagerHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/yandex/practicum/handler/SubtaskManagerHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/yandex/practicum/handler/TaskManagerHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/yandex/practicum/handler/TaskManagerHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/yandex/practicum/service/InMemoryTaskManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/yandex/practicum/service/InMemoryTaskManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/yandex/practicum/service/Managers.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/yandex/practicum/service/Managers.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/com/yandex/practicum/handler/HttpTaskServerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/com/yandex/practicum/handler/HttpTaskServerTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/com/yandex/practicum/handler/TaskManagerHandlerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/com/yandex/practicum/handler/TaskManagerHandlerTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

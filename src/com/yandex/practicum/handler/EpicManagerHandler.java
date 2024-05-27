@@ -1,11 +1,7 @@
 package com.yandex.practicum.handler;
 
 import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
-import com.yandex.practicum.intrerfaces.HistoryManager;
 import com.yandex.practicum.intrerfaces.TaskManager;
-import com.yandex.practicum.service.InMemoryHistoryManager;
-
 import java.io.IOException;
 import java.util.regex.Pattern;
 
