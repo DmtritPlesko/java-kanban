@@ -2,10 +2,12 @@ package com.yandex.practicum.handler;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.yandex.practicum.intrerfaces.TaskManager;
+import com.yandex.practicum.models.Epic;
+
 import java.io.IOException;
 import java.util.regex.Pattern;
 
-public class EpicManagerHandler extends TaskManagerHandler {
+public class EpicManagerHandler extends BaseHttpHandler {
     public EpicManagerHandler(TaskManager manager) {
         super(manager);
     }
@@ -30,13 +32,13 @@ public class EpicManagerHandler extends TaskManagerHandler {
 
                         if (id != -1) {
 
-                            taskManager.getEpicById(id);
-                            sendText(exchange, "Эпик с идентификатором - " + id);
-                            exchange.sendResponseHeaders(200, 0);
+                            Epic epic = taskManager.getEpicById(id);
+                            String response = gson.toJson(epic);
+                            sendText(exchange, response);
 
                         } else {
 
-                            sendText(exchange, "Неверный идентификатор - " + pathId);
+                            sendNotFound(exchange, "Неверный идентификатор - " + pathId);
                             exchange.sendResponseHeaders(404, 0);
 
                         }
@@ -48,22 +50,23 @@ public class EpicManagerHandler extends TaskManagerHandler {
                         if (id != -1) {
                             String str = gson.toJson(taskManager.getSubtasksByEpicId(id));
                             sendText(exchange, str);
-                            exchange.sendResponseHeaders(200, 0);
 
                         } else {
 
-                            sendText(exchange, "Неверный идентификатор - "
+                            sendNotFound(exchange, "Неверный идентификатор - "
                                     + pathId.replaceFirst("/subtasks", ""));
                             exchange.sendResponseHeaders(404, 0);
 
                         }
                     } else {
-                        sendText(exchange, "Неверный путь: " + path);
+                        sendNotFound(exchange, "Неверный путь: " + path);
                         exchange.sendResponseHeaders(400, 0);
                     }
                 }
                 case "POST": {
-                    exchange.sendResponseHeaders(201, 0);
+                    Epic epic = gson.fromJson(readText(exchange), Epic.class);
+                    taskManager.createNewEpic(epic);
+                    sendText(exchange, "Задача добавлена");
                 }
                 case "DELETE": {
                     if (Pattern.matches("^/epics/\\d+$", path)) {
@@ -73,27 +76,25 @@ public class EpicManagerHandler extends TaskManagerHandler {
 
                         if (id != -1) {
                             taskManager.deleteEpicForID(id);
-                            sendText(exchange, "Епик с идентификатором: " + id + " удалён");
-                            exchange.sendResponseHeaders(200, 0);
+                            sendText(exchange, "Задача удалена");
                         } else {
 
-                            sendText(exchange, "Неверный идентификатор: " + pathID);
-                            exchange.sendResponseHeaders(404, 0);
+                            sendNotFound(exchange, "Неверный идентификатор: " + pathID);
 
                         }
                     } else {
 
-                        sendText(exchange, "Неверный путь: " + path);
-                        exchange.sendResponseHeaders(400, 0);
+                        sendNotFound(exchange, "Неверный путь: " + path);
 
                     }
+                    break;
                 }
                 default: {
-
+                    sendNotFound(exchange, "BadRequest");
                 }
             }
         } catch (Exception e) {
-            sendText(exchange, e.getMessage());
+            sendNotFound(exchange, e.getMessage());
         }
     }
 }

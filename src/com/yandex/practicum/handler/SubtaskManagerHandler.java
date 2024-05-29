@@ -4,13 +4,10 @@ import com.sun.net.httpserver.HttpExchange;
 import com.yandex.practicum.intrerfaces.TaskManager;
 import com.yandex.practicum.models.Subtask;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.util.regex.Pattern;
 
-public class SubtaskManagerHandler extends TaskManagerHandler {
+public class SubtaskManagerHandler extends BaseHttpHandler {
     public SubtaskManagerHandler(TaskManager manager) {
         super(manager);
     }
@@ -26,7 +23,6 @@ public class SubtaskManagerHandler extends TaskManagerHandler {
 
                         String response = gson.toJson(taskManager.getListSubtask());
                         sendText(exchange, response);
-                        exchange.sendResponseHeaders(200, 0);
 
                     } else if (Pattern.matches("^/subtasks/\\d+$", path)) {
 
@@ -34,24 +30,19 @@ public class SubtaskManagerHandler extends TaskManagerHandler {
                         int id = parseInt(pathId);
 
                         if (id != -1) {
-                            sendText(exchange, taskManager.getSubtaskById(id).toString());
-                            exchange.sendResponseHeaders(200, 0);
-                            sendText(exchange, "Подзадача с идентификатором - " + id);
+                            String response = gson.toJson(taskManager.getSubtaskById(id));
+                            sendText(exchange, response);
                         } else {
                             sendNotFound(exchange, "Неверный идентификатор подзадачи - " + pathId);
-                            exchange.sendResponseHeaders(404, 0);
                         }
 
                     } else {
                         sendNotFound(exchange, "Неверный путь");
-                        exchange.sendResponseHeaders(400, 0);
                     }
                 }
                 case "POST": {
-                    if (Pattern.matches("^/sudtasks", path)) {
-                        String responseBody = String.valueOf(new BufferedReader(
-                                new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8)));
-                        Subtask sub = gson.fromJson(responseBody, Subtask.class);
+                    if (Pattern.matches("^/subtasks$", path)) {
+                        Subtask sub = gson.fromJson(readText(exchange), Subtask.class);
                         taskManager.createNewSubtask(sub);
                         sendText(exchange, "Задача добавлена");
                     } else {
@@ -65,7 +56,7 @@ public class SubtaskManagerHandler extends TaskManagerHandler {
                         int id = parseInt(pathId);
 
                         if (id != -1) {
-                            taskManager.getSubtaskById(id);
+                            taskManager.deleteSubtaskForID(id);
                             sendText(exchange, "Задача с идентификатором: - " + id + " удалена");
                         } else {
                             sendNotFound(exchange, "Неверный идентификатор задачи: " + pathId);
@@ -80,10 +71,7 @@ public class SubtaskManagerHandler extends TaskManagerHandler {
                     }
                 }
                 default: {
-
-                    sendNotFound(exchange, "Нвеерный метод");
-                    exchange.sendResponseHeaders(400, 0);
-
+                    sendNotFound(exchange, "BadRequest");
                 }
             }
         } catch (Exception e) {

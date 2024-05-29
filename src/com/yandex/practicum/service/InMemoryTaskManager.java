@@ -8,7 +8,6 @@ import com.yandex.practicum.models.*;
 import com.yandex.practicum.intrerfaces.HistoryManager;
 import com.yandex.practicum.intrerfaces.TaskManager;
 
-import javax.swing.*;
 
 public class InMemoryTaskManager implements TaskManager {
     protected int id = 0;
@@ -107,7 +106,7 @@ public class InMemoryTaskManager implements TaskManager {
         if (checkStartTime(task) && checkTime(task)) {
             priority.add(task);
         }
-        System.out.println("Задача доавлена");
+        System.out.println("Задача добавлена");
     }
 
     @Override
@@ -183,9 +182,9 @@ public class InMemoryTaskManager implements TaskManager {
     public void deleteSubtaskForID(Integer id) {
         if (listSubtask.containsKey(id)) {
             Subtask sub = listSubtask.get(id);
-            Epic epic = listEpic.get(sub.getIdEpic());
-            epic.deleteSubtaskByEpic(id);
-            changeStatusByEpic(epic);
+//            Epic epic = listEpic.get(sub.getIdEpic());
+//            epic.deleteSubtaskByEpic(id);
+//            changeStatusByEpic(epic);
             listSubtask.remove(id);
             historyManager.remove(id);
             System.out.println("подзадача удалена");
@@ -199,7 +198,7 @@ public class InMemoryTaskManager implements TaskManager {
     public void deleteEpicForID(Integer id) {
         if (listEpic.containsKey(id)) {
             listEpic.remove(id);
-            historyManager.remove(id);
+//            historyManager.remove(id);
             System.out.println("эпик удалён");
 
         } else {

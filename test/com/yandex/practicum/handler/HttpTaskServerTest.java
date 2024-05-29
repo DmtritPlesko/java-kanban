@@ -14,18 +14,27 @@ import java.time.LocalDateTime;
 
 public class HttpTaskServerTest {
 
-    public TaskManager manager;
+    public static TaskManager manager;
     public HttpTaskServer server;
     public Gson gson;
 
-    public HttpTaskServerTest() throws IOException {
-        manager = new InMemoryTaskManager();
-        server = new HttpTaskServer(manager);
+    private void createElement () throws IOException {
+        try {
+            manager = new InMemoryTaskManager();
+            server = new HttpTaskServer(manager);
+            gson = new GsonBuilder()
+                    .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
+                    .registerTypeAdapter(Duration.class, new DurationAdapter())
+                    .create();
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
 
     }
 
     @BeforeEach
     void setUp() throws IOException {
+        createElement();
         this.server.startServer();
     }
 

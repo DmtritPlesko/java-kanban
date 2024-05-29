@@ -1,11 +1,16 @@
 package com.yandex.practicum.handler;
 
 import com.sun.net.httpserver.HttpExchange;
+import com.yandex.practicum.intrerfaces.TaskManager;
 
 import java.io.IOException;
 import java.util.regex.Pattern;
 
 public class HistoryManagerHandler extends BaseHttpHandler {
+    public HistoryManagerHandler(TaskManager manager) {
+        super(manager);
+    }
+
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         String path = exchange.getRequestURI().getPath();
@@ -14,7 +19,7 @@ public class HistoryManagerHandler extends BaseHttpHandler {
             switch (method) {
                 case "GET": {
                     if (Pattern.matches("^/history$", path)) {
-                        System.out.println("qwfqwf");
+                        super.sendText(exchange, gson.toJson(taskManager.getHistory()));
                     } else {
 
                         sendNotFound(exchange, "Неверный запрос");
@@ -23,11 +28,11 @@ public class HistoryManagerHandler extends BaseHttpHandler {
                     }
                 }
                 default: {
-                    sendNotFound(exchange,"Неверный метод");
+                    sendNotFound(exchange, "BadRequest");
                 }
             }
         } catch (Exception e) {
-            sendText(exchange,e.getMessage());
+            sendText(exchange, e.getMessage());
         }
 
     }
