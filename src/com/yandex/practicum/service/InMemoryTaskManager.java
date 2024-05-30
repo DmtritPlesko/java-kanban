@@ -8,6 +8,7 @@ import com.yandex.practicum.models.*;
 import com.yandex.practicum.intrerfaces.HistoryManager;
 import com.yandex.practicum.intrerfaces.TaskManager;
 
+
 public class InMemoryTaskManager implements TaskManager {
     protected int id = 0;
     protected Map<Integer, Task> listTask;
@@ -66,6 +67,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     }
 
+    @Override
     public TreeSet<Task> getPrioritizedTasks() {
         return priority;
     }
@@ -104,7 +106,7 @@ public class InMemoryTaskManager implements TaskManager {
         if (checkStartTime(task) && checkTime(task)) {
             priority.add(task);
         }
-        System.out.println("Задача доавлена");
+        System.out.println("Задача добавлена");
     }
 
     @Override
@@ -180,13 +182,14 @@ public class InMemoryTaskManager implements TaskManager {
     public void deleteSubtaskForID(Integer id) {
         if (listSubtask.containsKey(id)) {
             Subtask sub = listSubtask.get(id);
-            Epic epic = listEpic.get(sub.getIdEpic());
-            epic.deleteSubtaskByEpic(id);
-            changeStatusByEpic(epic);
+//            Epic epic = listEpic.get(sub.getIdEpic());
+//            epic.deleteSubtaskByEpic(id);
+//            changeStatusByEpic(epic);
             listSubtask.remove(id);
             historyManager.remove(id);
             System.out.println("подзадача удалена");
         } else {
+
             System.out.println("невозможно удалить задачу");
         }
     }
@@ -195,7 +198,7 @@ public class InMemoryTaskManager implements TaskManager {
     public void deleteEpicForID(Integer id) {
         if (listEpic.containsKey(id)) {
             listEpic.remove(id);
-            historyManager.remove(id);
+//            historyManager.remove(id);
             System.out.println("эпик удалён");
 
         } else {
@@ -264,5 +267,16 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public List<Task> getHistory() {
         return historyManager.getHistory();
+    }
+
+    @Override
+    public List<Subtask> getSubtasksByEpicId(Integer id) {
+        Epic epic = getEpicById(id);
+        List<Subtask> subList = new ArrayList<>();
+
+        for (Integer temp : epic.getSubtaskByEpic()) {
+            subList.add(listSubtask.get(temp));
+        }
+        return subList;
     }
 }
